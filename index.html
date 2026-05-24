@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IceCloud & Plux · Minecraft Java 插件系列</title>
-    <!-- 像素字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>IceCloud & Plux · Minecraft 插件系列</title>
+    <!-- 引入现代字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,321 +16,397 @@
         }
 
         body {
-            background-color: #2b2b2b;
-            color: #f0e6d2;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e9eef3 100%);
+            color: #2d3748;
             line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
 
-        /* 像素风格装饰标题字体 */
-        .pixel-font {
-            font-family: 'Press Start 2P', 'Courier New', monospace;
-            letter-spacing: 1px;
-            text-shadow: 3px 3px 0 #00000050;
-        }
-
-        /* 导航栏 */
+        /* 导航栏 - 玻璃态 */
         header {
-            width: 100%;
-            background: #3c3c3c;
-            border-bottom: 4px solid #6b8c42;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             padding: 1rem 2rem;
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 10;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
 
         .logo {
-            font-size: 1.2rem;
-            color: #b8d98a;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.8rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #2d3748;
         }
-        .logo img {
-            image-rendering: pixelated;
-            width: 40px;
-            height: 40px;
-            background: #7c9d3f;
-            border: 2px solid #5a7a2c;
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #63b3ed, #4299e1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 14px rgba(66, 153, 225, 0.3);
         }
 
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
         nav a {
-            color: #e0d6b0;
             text-decoration: none;
-            margin-left: 2rem;
-            font-weight: bold;
+            color: #4a5568;
+            font-weight: 600;
             font-size: 0.9rem;
-            padding: 0.5rem 0;
-            border-bottom: 2px solid transparent;
-            transition: 0.2s;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
+            transition: color 0.2s;
+            position: relative;
         }
         nav a:hover {
-            color: #b8d98a;
-            border-bottom-color: #b8d98a;
+            color: #3182ce;
         }
-
-        /* 主要内容 */
-        .container {
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3182ce;
+            transition: width 0.2s;
+            border-radius: 1px;
+        }
+        nav a:hover::after {
             width: 100%;
-            max-width: 1200px;
-            padding: 2rem 1.5rem;
-            flex: 1;
         }
 
+        /* 主要内容容器 */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* 英雄区域 */
         .hero {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
         .hero h1 {
-            font-size: 2.2rem;
-            color: #f7e358;
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2b6cb0, #4299e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 0.8rem;
-            word-break: break-word;
+            letter-spacing: -0.5px;
         }
         .hero .subtitle {
-            font-size: 0.7rem;
-            color: #bba88c;
-            letter-spacing: 2px;
+            font-size: 1.1rem;
+            color: #5a6c7d;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: #bee3f8;
+            color: #2b6cb0;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
         }
 
-        /* 插件卡片区域 */
+        /* 插件卡片 */
         .plugin-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
             margin: 3rem 0;
         }
 
         .plugin-card {
-            background: #3a3a3a;
-            border: 3px solid #5a5a5a;
-            border-radius: 0px;
-            padding: 2rem 1.5rem;
-            box-shadow: 8px 8px 0 #1f1f1f;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+            border-radius: 24px;
+            padding: 2.2rem 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 5px 15px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
         .plugin-card:hover {
-            transform: translate(-4px, -4px);
-            box-shadow: 12px 12px 0 #1f1f1f;
-            border-color: #8aa55b;
+            transform: translateY(-6px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.04);
         }
 
-        .plugin-icon {
-            width: 80px;
-            height: 80px;
-            background: #4a4a4a;
-            border: 3px solid #7c9d3f;
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 1.5rem;
-            image-rendering: pixelated;
+        }
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            background: #536b2e;
-            color: #f0e6d2;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+        .ice-icon {
+            background: linear-gradient(135deg, #63b3ed, #3182ce);
+        }
+        .plux-icon {
+            background: linear-gradient(135deg, #9f7aea, #6b46c1);
         }
 
-        .plugin-card h2 {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.2rem;
-            color: #f7e358;
-            margin-bottom: 0.5rem;
+        .card-header h2 {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: #1a202c;
         }
-        .plugin-card .tagline {
-            color: #b8d98a;
-            font-weight: bold;
-            margin-bottom: 1rem;
+        .tagline {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 1.2rem;
             font-size: 0.9rem;
         }
-        .plugin-card ul {
+
+        .feature-list {
             list-style: none;
-            text-align: left;
-            width: 100%;
-            margin: 1rem 0 1.5rem 0;
-            font-size: 0.9rem;
-            color: #d5c8b2;
+            margin: 0.8rem 0 1.8rem;
+            flex: 1;
         }
-        .plugin-card ul li {
-            padding: 0.3rem 0;
-            border-bottom: 1px dashed #5a5a5a;
+        .feature-list li {
+            padding: 0.5rem 0;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
+            color: #4a5568;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #f7fafc;
         }
-        .plugin-card ul li::before {
-            content: "⛏️";
-            font-size: 0.9rem;
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-list li::before {
+            content: "✓";
+            font-weight: bold;
+            color: #4299e1;
+            font-size: 1rem;
+            width: 20px;
+        }
+        .plux-card .feature-list li::before {
+            color: #9f7aea;
         }
 
         .btn {
-            background: #6b8c42;
-            border: 2px solid #4a6628;
-            color: #f0e6d2;
-            padding: 0.8rem 1.8rem;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.7rem;
-            text-decoration: none;
             display: inline-block;
+            padding: 0.75rem 1.6rem;
+            border-radius: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+            border: none;
             cursor: pointer;
-            transition: 0.2s;
-            margin-top: auto;
-            box-shadow: 0 4px 0 #3a5220;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-        .btn:hover {
-            background: #7c9d3f;
-            box-shadow: 0 2px 0 #3a5220;
-            transform: translateY(2px);
+        .btn-primary {
+            background: #3182ce;
+            color: white;
+            box-shadow: 0 8px 16px rgba(49, 130, 206, 0.25);
         }
-        .btn.secondary {
-            background: #8b6b4d;
-            border-color: #654c32;
-            box-shadow: 0 4px 0 #4e3822;
+        .btn-primary:hover {
+            background: #2b6cb0;
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(49, 130, 206, 0.35);
         }
-        .btn.secondary:hover {
-            background: #a07d5b;
+        .btn-secondary {
+            background: #805ad5;
+            color: white;
+            box-shadow: 0 8px 16px rgba(128, 90, 213, 0.25);
+        }
+        .btn-secondary:hover {
+            background: #6b46c1;
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(128, 90, 213, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #cbd5e0;
+            color: #4a5568;
+        }
+        .btn-outline:hover {
+            border-color: #a0aec0;
+            background: #f7fafc;
         }
 
-        /* 版本信息 */
-        .version-info {
-            background: #2f2f2f;
-            border: 2px solid #5a5a5a;
-            padding: 1rem 2rem;
-            margin: 2rem 0;
-            text-align: center;
+        .version-badge {
             font-size: 0.8rem;
-            color: #b8af9b;
+            color: #718096;
+            margin-top: 1rem;
+            font-weight: 500;
         }
-        .version-info span {
-            color: #f7e358;
-            font-weight: bold;
+
+        /* 下载通用区块 */
+        .info-box {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+        .info-box h3 {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #1a202c;
+        }
+        .info-box p {
+            color: #5a6c7d;
+            margin-bottom: 1.2rem;
         }
 
         /* 页脚 */
         footer {
-            width: 100%;
-            background: #1f1f1f;
-            border-top: 4px solid #6b8c42;
             text-align: center;
-            padding: 1.5rem;
-            color: #8b8b8b;
-            font-size: 0.8rem;
-            margin-top: 2rem;
+            padding: 2rem;
+            background: white;
+            border-top: 1px solid #edf2f7;
+            color: #a0aec0;
+            font-size: 0.85rem;
+            margin-top: 3rem;
         }
         footer a {
-            color: #b8d98a;
+            color: #4a5568;
             text-decoration: none;
+            font-weight: 600;
+        }
+        footer a:hover {
+            color: #3182ce;
         }
 
-        /* 响应式调整 */
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
             header {
                 flex-direction: column;
                 gap: 1rem;
+                padding: 1rem;
             }
-            nav a {
-                margin-left: 1rem;
-                font-size: 0.6rem;
+            nav {
+                gap: 1.2rem;
             }
             .hero h1 {
-                font-size: 1.5rem;
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 顶部导航 -->
+    <!-- 导航栏 -->
     <header>
-        <div class="logo pixel-font">
-            <div class="plugin-icon" style="width:40px; height:40px; font-size:1.2rem; margin:0;">⛏️</div>
+        <div class="logo">
+            <div class="logo-icon">⛏️</div>
             IceCloud & Plux
         </div>
         <nav>
             <a href="#">首页</a>
-            <a href="#icecloud">IceCloud</a>
-            <a href="#plux">Plux</a>
+            <a href="#plugins">插件</a>
             <a href="#download">下载</a>
             <a href="#">文档</a>
+            <a href="#">社区</a>
         </nav>
     </header>
 
-    <div class="container">
-        <!-- 英雄区域 -->
+    <main class="container">
+        <!-- 英雄区 -->
         <section class="hero">
-            <h1 class="pixel-font">IceCloud & Plux</h1>
-            <p class="subtitle pixel-font">为 Minecraft Java 服务器打造的次世代插件系列</p>
-            <p style="max-width:700px; margin:1.5rem auto; color:#c4b99a;">
-                从冰雪世界的极致控场到绚烂多彩的粒子特效，两大系列插件覆盖服务器管理、娱乐、视觉与玩法扩展。
-                兼容 Paper / Spigot 1.19.x - 1.21.x，开源且持续更新。
-            </p>
+            <h1>IceCloud & Plux</h1>
+            <p class="subtitle">为 Minecraft Java 服务器打造的现代插件系列，覆盖世界控制与视觉特效，稳定兼容 Paper / Spigot。</p>
+            <span class="hero-badge">🛠️ 支持 1.19.x - 1.21.x · Java 17+</span>
         </section>
 
-        <!-- 插件卡片网格 -->
-        <div class="plugin-grid">
-            <!-- IceCloud 系列卡片 -->
-            <div class="plugin-card" id="icecloud">
-                <div class="plugin-icon">❄️</div>
-                <h2>IceCloud</h2>
+        <!-- 插件卡片 -->
+        <div class="plugin-grid" id="plugins">
+            <!-- IceCloud 卡片 -->
+            <div class="plugin-card">
+                <div class="card-header">
+                    <div class="card-icon ice-icon">❄️</div>
+                    <h2>IceCloud</h2>
+                </div>
                 <div class="tagline">冰雪主题 · 世界控制与自动化</div>
-                <ul>
-                    <li>动态领地冻土保护</li>
-                    <li>极寒气候系统 & 暴风雪事件</li>
-                    <li>冰轨交通 & 冻洋建筑辅助</li>
-                    <li>玩家冰霜技能 & 成就系统</li>
-                    <li>GUI 管理面板，低延迟运行</li>
+                <ul class="feature-list">
+                    <li>动态领地冻土保护系统</li>
+                    <li>极寒气候 & 暴风雪事件</li>
+                    <li>冰轨交通与建筑辅助</li>
+                    <li>玩家冰霜技能与成就</li>
+                    <li>直观的 GUI 管理面板</li>
                 </ul>
-                <a href="#" class="btn">📥 下载 IceCloud</a>
-                <p style="margin-top:0.8rem; font-size:0.75rem; color:#aaa;">最新版本 v2.4.0 · 支持 1.21</p>
+                <div>
+                    <a href="#" class="btn btn-primary">下载 IceCloud</a>
+                    <a href="#" class="btn btn-outline">文档</a>
+                </div>
+                <div class="version-badge">最新 v2.4.0 · 1.21 就绪</div>
             </div>
 
-            <!-- Plux 系列卡片 -->
-            <div class="plugin-card" id="plux">
-                <div class="plugin-icon">✨</div>
-                <h2>Plux</h2>
+            <!-- Plux 卡片 -->
+            <div class="plugin-card plux-card">
+                <div class="card-header">
+                    <div class="card-icon plux-icon">✨</div>
+                    <h2>Plux</h2>
+                </div>
                 <div class="tagline">粒子特效 · 视觉与交互增强</div>
-                <ul>
+                <ul class="feature-list">
                     <li>200+ 自定义粒子模板</li>
-                    <li>玩家动作触发特效（挥剑、潜行）</li>
-                    <li>GUI 粒子编辑器（游戏内）</li>
+                    <li>动作触发特效（挥剑/潜行）</li>
+                    <li>游戏内 GUI 粒子编辑器</li>
                     <li>粒子音乐同步 & 红石联动</li>
-                    <li>低性能消耗，可配置文件</li>
+                    <li>低性能消耗，高度可配置</li>
                 </ul>
-                <a href="#" class="btn secondary">📥 下载 Plux</a>
-                <p style="margin-top:0.8rem; font-size:0.75rem; color:#aaa;">最新版本 v1.8.2 · 支持 1.20.4+</p>
+                <div>
+                    <a href="#" class="btn btn-secondary">下载 Plux</a>
+                    <a href="#" class="btn btn-outline">文档</a>
+                </div>
+                <div class="version-badge">最新 v1.8.2 · 支持 1.20.4+</div>
             </div>
         </div>
 
-        <!-- 通用下载/版本信息 -->
-        <div class="version-info" id="download">
-            <p>🔧 <span>全系列兼容</span> · Paper 1.19.4 - 1.21.1 · Java 17+</p>
-            <p style="margin-top:0.5rem;">所有插件均已在 GitHub 开源，遵循 MIT 协议。欢迎提交 Issues 与 PR。</p>
-            <div style="margin-top:1rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-                <a href="#" class="btn" style="font-size:0.6rem;">📦 浏览所有版本</a>
-                <a href="#" class="btn secondary" style="font-size:0.6rem;">📖 使用文档</a>
+        <!-- 通用下载信息 -->
+        <div class="info-box" id="download">
+            <h3>🔧 全系列兼容，即装即用</h3>
+            <p>所有插件均遵循 MIT 协议开源，可免费使用与修改。欢迎到 GitHub 提交反馈或贡献代码。</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="#" class="btn btn-primary">📦 浏览所有版本</a>
+                <a href="#" class="btn btn-outline">📖 使用教程</a>
             </div>
+            <p style="margin-top: 1.2rem; font-size:0.85rem; color:#718096;">兼容 Paper 1.19.4 - 1.21.1 · Spigot · 需要 Java 17+</p>
         </div>
-    </div>
+    </main>
 
-    <!-- 页脚 -->
     <footer>
-        <p>© 2025 IceCloud & Plux 插件系列 · 本站与 Mojang 或 Microsoft 无关。</p>
-        <p style="margin-top:0.5rem;">
-            <a href="#">GitHub</a> · <a href="#">Discord 社区</a> · <a href="#">QQ 交流群</a>
+        <p>© 2025 IceCloud & Plux 插件系列 · 本网站与 Mojang 或 Microsoft 无关。</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="#">GitHub</a> · <a href="#">Discord</a> · <a href="#">Bilibili</a>
         </p>
     </footer>
 </body>
