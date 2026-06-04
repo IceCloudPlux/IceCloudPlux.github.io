@@ -4,6 +4,8 @@ backend:
   branch: main
   base_url: "https://api.decapcms.org"
   auth_scope: repo
+  client_id: Ov23lilPV6dy4UavQ0ZW
+  client_secret: d065593edc04a3c09b7be10ea1f17d68ed2e77aa
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
