@@ -1,0 +1,37 @@
+backend:
+  name: github
+  repo: yaxzer21145/你的仓库名   # 例如 yaxzer21145/yaxzer21145.github.io
+  branch: main                  # 或 master，根据你的默认分支
+  base_url: https://your-site.com # 可选，部署后填写你的域名
+
+media_folder: "images/uploads"  # 上传文件的存放位置
+public_folder: "/images/uploads"
+
+collections:
+  - name: "icecloud_plugins"
+    label: "IceCloud 插件"
+    folder: "_data"
+    create: true
+    format: "json"
+    extension: "json"
+    slug: "{{slug}}"
+    fields:
+      - { label: "插件名称", name: "title", widget: "string" }
+      - { label: "版本", name: "version", widget: "string" }
+      - { label: "支持 MC 版本", name: "mc_version", widget: "string" }
+      - { label: "发布日期", name: "date", widget: "date" }
+      - { label: "下载链接", name: "download_url", widget: "string" }
+
+  - name: "plux_plugins"
+    label: "Plux 插件"
+    folder: "_data"
+    create: true
+    format: "json"
+    extension: "json"
+    slug: "{{slug}}"
+    fields:
+      - { label: "插件名称", name: "title", widget: "string" }
+      - { label: "版本", name: "version", widget: "string" }
+      - { label: "支持 MC 版本", name: "mc_version", widget: "string" }
+      - { label: "发布日期", name: "date", widget: "date" }
+      - { label: "下载链接", name: "download_url", widget: "string" }
