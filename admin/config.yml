@@ -1,11 +1,11 @@
 backend:
   name: github
-  repo: yaxzer21145/你的仓库名   # 例如 yaxzer21145/yaxzer21145.github.io
+  repo: IceCloudPlux/IceCloudPlux.github.io   # 例如 yaxzer21145/yaxzer21145.github.io
   branch: main                  # 或 master，根据你的默认分支
-  base_url: https://your-site.com # 可选，部署后填写你的域名
+  base_url: https://IceCloudPlux/IceCloudPlux.github.io # 可选，部署后填写你的域名
 
-media_folder: "images/uploads"  # 上传文件的存放位置
-public_folder: "/images/uploads"
+media_folder: "recources/uploads"  # 上传文件的存放位置
+public_folder: "/recources/uploads"
 
 collections:
   - name: "icecloud_plugins"
