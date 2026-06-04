@@ -82,6 +82,11 @@
             background: #6b46c1;
             transform: scale(1.02);
         }
+        .loading, .empty {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+        }
         footer {
             margin-top: 3rem;
             text-align: center;
@@ -108,41 +113,62 @@
                         <th>下载</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Plux-BedwarsEffects</td>
-                        <td class="version">v0</td>
-                        <td>1.7.10 - 26.1</td>
-                        <td>2026-??-??</td>
-                        <td><a href="#" class="btn-download">正在开发 .jar</a></td>
-                    </tr>
-                    <tr>
-                        <td>Plux-NPC</td>
-                        <td class="version">v0</td>
-                        <td>1.7.10 - 26.1</td>
-                        <td>2026-??-??</td>
-                        <td><a href="#" class="btn-download">正在开发 .jar</a></td>
-                    </tr>
-                    <tr>
-                        <td>Plux-GUI</td>
-                        <td class="version">v0</td>
-                        <td>1.7.10 - 26.1</td>
-                        <td>2026-??-??</td>
-                        <td><a href="#" class="btn-download">正在开发 .jar</a></td>
-                    </tr>
-                    <tr>
-                        <td>Plux-Lands</td>
-                        <td class="version">v0</td>
-                        <td>1.7.10 - 26.1</td>
-                        <td>2026-??-??</td>
-                        <td><a href="#" class="btn-download">正在开发 .jar</a></td>
-                    </tr>
+                <tbody id="plugin-table-body">
+                    <!-- 动态生成 -->
                 </tbody>
             </table>
+            <div id="status-message" class="loading">加载中…</div>
         </div>
     </div>
     <footer>
         <p>© 2026 IceCloud & Plux Dev · <a href="index.html">返回主站</a></p>
     </footer>
+
+    <script>
+        const tbody = document.getElementById('plugin-table-body');
+        const statusMsg = document.getElementById('status-message');
+
+        fetch('/_data/plux_plugins.json')
+            .then(response => {
+                if (!response.ok) throw new Error('数据加载失败');
+                return response.json();
+            })
+            .then(data => {
+                statusMsg.style.display = 'none';
+                if (!Array.isArray(data) || data.length === 0) {
+                    statusMsg.textContent = '暂无插件数据，请通过后台添加。';
+                    statusMsg.className = 'empty';
+                    statusMsg.style.display = 'block';
+                    return;
+                }
+                data.forEach(plugin => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${escapeHtml(plugin.title)}</td>
+                        <td class="version">${escapeHtml(plugin.version)}</td>
+                        <td>${escapeHtml(plugin.mc_version)}</td>
+                        <td>${escapeHtml(plugin.date)}</td>
+                        <td><a href="${escapeHtml(plugin.download_url)}" class="btn-download" target="_blank">下载 .jar</a></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                statusMsg.textContent = '无法加载插件列表，请刷新重试。';
+                statusMsg.className = 'empty';
+                statusMsg.style.display = 'block';
+            });
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
 </body>
 </html>
