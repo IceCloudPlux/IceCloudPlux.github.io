@@ -1,43 +1,40 @@
 backend:
   name: github
-  repo: IceCloudPlux/IceCloudPlux.github.io   # 例如 yaxzer21145/yaxzer21145.github.io
-  branch: main                  # 或 master，根据你的默认分支
-  base_url: https://IceCloudPlux.github.io # 可选，部署后填写你的域名
+  repo: IceCloudPlux/IceCloudPlux.github.io
+  branch: main
+  base_url: "https://api.decapcms.org"
+  auth_scope: repo
 
-media_folder: "recources/uploads"  # 上传文件的存放位置
-public_folder: "/recources/uploads"
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
 
 collections:
-  - name: "icecloud_plugins"
-    label: "IceCloud 插件"
-    folder: "_data"
-    create: true
-    format: "json"
-    extension: "json"
-    slug: "{{slug}}"
-    fields:
-      - { label: "插件名称", name: "title", widget: "string" }
-      - { label: "版本", name: "version", widget: "string" }
-      - { label: "支持 MC 版本", name: "mc_version", widget: "string" }
-      - { label: "发布日期", name: "date", widget: "date" }
-      - { label: "下载链接", name: "download_url", widget: "string" }
-
-  - name: "plux_plugins"
-    label: "Plux 插件"
-    folder: "_data"
-    create: true
-    format: "json"
-    extension: "json"
-    slug: "{{slug}}"
-    fields:
-      - { label: "插件名称", name: "title", widget: "string" }
-      - { label: "版本", name: "version", widget: "string" }
-      - { label: "支持 MC 版本", name: "mc_version", widget: "string" }
-      - { label: "发布日期", name: "date", widget: "date" }
-      - { label: "下载链接", name: "download_url", widget: "string" }
-backend:
-name: github
-repo: IceCloudPlux/IceCloudPlux.github.io
-branch: main
-auth_scope: repo
-base_url: "https://api.decapcms.org"   # 使用社区认证代理
+  - name: "plugin_data"
+    label: "插件管理"
+    files:
+      - name: "icecloud_list"
+        label: "IceCloud 插件列表"
+        file: "_data/icecloud_plugins.json"
+        fields:
+          - name: "plugins"
+            label: "插件"
+            widget: "list"
+            fields:
+              - { label: "插件名称", name: "title", widget: "string" }
+              - { label: "版本号", name: "version", widget: "string" }
+              - { label: "支持 MC 版本", name: "mc_version", widget: "string" }
+              - { label: "发布日期", name: "date", widget: "date" }
+              - { label: "下载链接", name: "download_url", widget: "string" }
+      - name: "plux_list"
+        label: "Plux 插件列表"
+        file: "_data/plux_plugins.json"
+        fields:
+          - name: "plugins"
+            label: "插件"
+            widget: "list"
+            fields:
+              - { label: "插件名称", name: "title", widget: "string" }
+              - { label: "版本号", name: "version", widget: "string" }
+              - { label: "支持 MC 版本", name: "mc_version", widget: "string" }
+              - { label: "发布日期", name: "date", widget: "date" }
+              - { label: "下载链接", name: "download_url", widget: "string" }
