@@ -1,9 +1,7 @@
 backend:
-  name: github
-  repo: IceCloudPlux/IceCloudPlux.github.io
+  name: git-gateway
   branch: main
-  base_url: "https://api.decapcms.org"
-  auth_scope: repo
+  repo: IceCloudPlux/IceCloudPlux.github.io
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
