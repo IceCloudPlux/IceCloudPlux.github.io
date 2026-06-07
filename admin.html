@@ -35,8 +35,6 @@
   </style>
 </head>
 <body>
-
-  <!-- 登录界面（增加用户名和密码） -->
   <div id="login-section" class="login-box">
     <h2>🔐 管理员登录</h2>
     <input type="text" id="usernameInput" placeholder="用户名">
@@ -49,7 +47,6 @@
     </p>
   </div>
 
-  <!-- 管理界面 -->
   <div id="main-section" class="container" style="display: none;">
     <button class="btn-logout" onclick="logout()">退出登录</button>
     <h1>⚙️ 插件管理</h1>
@@ -73,7 +70,6 @@
     </table>
   </div>
 
-  <!-- 编辑弹窗 -->
   <div id="pluginModal" class="modal">
     <div class="modal-content">
       <h3 id="modalTitle">添加插件</h3>
@@ -96,21 +92,25 @@
   </div>
 
   <script>
-    // 配置
     const REPO_OWNER = 'IceCloudPlux';
     const REPO_NAME = 'IceCloudPlux.github.io';
     const BRANCH = 'main';
     const DATA_PATH = '_data';
 
-    // 固定的用户名和密码
     const VALID_USERNAME = 'ya_xzer21145';
-    const VALID_PASSWORD = '922610Myx_';
+    const REAL_PASSWORD_HASH = 'b7a5e5b4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4';
 
     let currentFile = 'icecloud_plugins';
     let pluginsData = [];
     let token = localStorage.getItem('gh_token') || '';
 
-    // 工具函数
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
     function b64EncodeUnicode(str) {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
         return String.fromCharCode('0x' + p1);
@@ -126,14 +126,18 @@
         .replace(/'/g, '&#039;');
     }
 
-    // 登录验证（增加用户名和密码检查）
-    function login() {
+    async function login() {
       const username = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value;
       const inputToken = document.getElementById('tokenInput').value.trim();
 
-      // 检查用户名和密码
-      if (username !== VALID_USERNAME || password !== VALID_PASSWORD) {
+      if (username !== VALID_USERNAME) {
+        showLoginError('用户名或密码错误');
+        return;
+      }
+
+      const hash = await sha256(password);
+      if (hash !== REAL_PASSWORD_HASH) {
         showLoginError('用户名或密码错误');
         return;
       }
@@ -144,7 +148,6 @@
       }
 
       token = inputToken;
-      // 验证 Token 有效性
       fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`, {
         headers: { Authorization: `token ${token}` }
       })
@@ -170,18 +173,14 @@
       }
     }
 
-    // 页面加载时自动登录检查
     window.addEventListener('DOMContentLoaded', () => {
       if (token) {
-        // 有 Token，跳过用户名密码检查直接进入后台（但这样不够安全，可以要求重新登录）
-        // 这里保持原有逻辑：只要 localStorage 中有 Token 就直接进入
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('main-section').style.display = 'block';
         loadPlugins();
       }
     });
 
-    // 标签切换
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -191,7 +190,6 @@
       });
     });
 
-    // 加载数据
     async function loadPlugins() {
       const filePath = `${DATA_PATH}/${currentFile}.json`;
       try {
@@ -246,7 +244,6 @@
       });
     }
 
-    // 模态框操作
     function openAddModal() {
       document.getElementById('modalTitle').textContent = '添加插件';
       document.getElementById('pluginIndex').value = '';
@@ -276,7 +273,6 @@
       document.getElementById('pluginModal').style.display = 'none';
     }
 
-    // 保存按钮
     document.getElementById('saveBtn').addEventListener('click', async () => {
       const index = document.getElementById('pluginIndex').value;
       const newPlugin = {
@@ -308,7 +304,6 @@
       await saveToGitHub();
     }
 
-    // 保存到 GitHub
     async function saveToGitHub() {
       const filePath = `${DATA_PATH}/${currentFile}.json`;
       const newContent = JSON.stringify(pluginsData, null, 2);
