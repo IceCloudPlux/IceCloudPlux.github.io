@@ -38,7 +38,6 @@
   <div id="login-section" class="login-box">
     <h2>🔐 管理员登录</h2>
     <input type="text" id="usernameInput" placeholder="用户名">
-    <input type="password" id="passwordInput" placeholder="密码">
     <input type="password" id="tokenInput" placeholder="Token">
     <button onclick="login()">验证并进入后台</button>
     <div class="error" id="loginError"></div>
@@ -98,18 +97,10 @@
     const DATA_PATH = '_data';
 
     const VALID_USERNAME = 'ya_xzer21145';
-    const REAL_PASSWORD_HASH = '308e52c787b31cf131a96ad21875ec2bbd6c88fda89e44cadf6bedea43d31864';
 
     let currentFile = 'icecloud_plugins';
     let pluginsData = [];
     let token = localStorage.getItem('gh_token') || '';
-
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
 
     function b64EncodeUnicode(str) {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
@@ -126,19 +117,12 @@
         .replace(/'/g, '&#039;');
     }
 
-    async function login() {
+    function login() {
       const username = document.getElementById('usernameInput').value.trim();
-      const password = document.getElementById('passwordInput').value;
       const inputToken = document.getElementById('tokenInput').value.trim();
 
       if (username !== VALID_USERNAME) {
-        showLoginError('用户名或密码错误');
-        return;
-      }
-
-      const hash = await sha256(password);
-      if (hash !== REAL_PASSWORD_HASH) {
-        showLoginError('用户名或密码错误');
+        showLoginError('用户名错误');
         return;
       }
 
