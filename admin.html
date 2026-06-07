@@ -35,10 +35,13 @@
   </style>
 </head>
 <body>
+
+  <!-- 登录界面（增加用户名和密码） -->
   <div id="login-section" class="login-box">
     <h2>🔐 管理员登录</h2>
-    <p style="color: #64748b; font-size: 0.9rem;">请输入后台登陆密码</p>
-    <input type="password" id="tokenInput" placeholder="Password">
+    <input type="text" id="usernameInput" placeholder="用户名">
+    <input type="password" id="passwordInput" placeholder="密码">
+    <input type="password" id="tokenInput" placeholder="Token">
     <button onclick="login()">验证并进入后台</button>
     <div class="error" id="loginError"></div>
     <p style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8;">
@@ -46,6 +49,7 @@
     </p>
   </div>
 
+  <!-- 管理界面 -->
   <div id="main-section" class="container" style="display: none;">
     <button class="btn-logout" onclick="logout()">退出登录</button>
     <h1>⚙️ 插件管理</h1>
@@ -69,7 +73,7 @@
     </table>
   </div>
 
-  <!-- 编辑/添加弹窗 -->
+  <!-- 编辑弹窗 -->
   <div id="pluginModal" class="modal">
     <div class="modal-content">
       <h3 id="modalTitle">添加插件</h3>
@@ -92,36 +96,66 @@
   </div>
 
   <script>
-    // ==================== 配置 ====================
+    // 配置
     const REPO_OWNER = 'IceCloudPlux';
     const REPO_NAME = 'IceCloudPlux.github.io';
     const BRANCH = 'main';
-    const DATA_PATH = '_data'; // 存放 JSON 的文件夹
+    const DATA_PATH = '_data';
 
-    let currentFile = 'icecloud_plugins'; // 默认
+    // 固定的用户名和密码
+    const VALID_USERNAME = 'ya_xzer21145';
+    const VALID_PASSWORD = '922610Myx_';
+
+    let currentFile = 'icecloud_plugins';
     let pluginsData = [];
     let token = localStorage.getItem('gh_token') || '';
 
-    // ==================== 登录逻辑 ====================
+    // 工具函数
+    function b64EncodeUnicode(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // 登录验证（增加用户名和密码检查）
     function login() {
+      const username = document.getElementById('usernameInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
       const inputToken = document.getElementById('tokenInput').value.trim();
-      if (!inputToken) return showLoginError('请输入 Token');
+
+      // 检查用户名和密码
+      if (username !== VALID_USERNAME || password !== VALID_PASSWORD) {
+        showLoginError('用户名或密码错误');
+        return;
+      }
+
+      if (!inputToken) {
+        showLoginError('请输入 Token');
+        return;
+      }
+
       token = inputToken;
-      // 验证 Token 是否有效：尝试获取仓库信息
+      // 验证 Token 有效性
       fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`, {
         headers: { Authorization: `token ${token}` }
       })
       .then(res => {
         if (!res.ok) throw new Error('Token 无效或没有仓库权限');
-        // 保存到 localStorage
         localStorage.setItem('gh_token', token);
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('main-section').style.display = 'block';
-        loadPlugins(); // 加载初始数据
+        loadPlugins();
       })
-      .catch(err => {
-        showLoginError(err.message);
-      });
+      .catch(err => showLoginError(err.message));
     }
 
     function showLoginError(msg) {
@@ -136,17 +170,18 @@
       }
     }
 
-    // 页面加载时检查是否已保存 Token
+    // 页面加载时自动登录检查
     window.addEventListener('DOMContentLoaded', () => {
       if (token) {
-        // 有 token，直接尝试进入后台（可以再验证一次，也可以信任）
+        // 有 Token，跳过用户名密码检查直接进入后台（但这样不够安全，可以要求重新登录）
+        // 这里保持原有逻辑：只要 localStorage 中有 Token 就直接进入
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('main-section').style.display = 'block';
         loadPlugins();
       }
     });
 
-    // ==================== 标签切换 ====================
+    // 标签切换
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', (e) => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -156,18 +191,26 @@
       });
     });
 
-    // ==================== 数据加载 ====================
+    // 加载数据
     async function loadPlugins() {
       const filePath = `${DATA_PATH}/${currentFile}.json`;
       try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`, {
           headers: { Authorization: `token ${token}` }
         });
-        if (!res.ok) throw new Error('加载失败，可能文件不存在或 Token 权限不足');
+        if (res.status === 404) {
+          pluginsData = [];
+          renderTable();
+          return;
+        }
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || '加载失败');
+        }
         const data = await res.json();
-        const content = atob(data.content.replace(/\n/g, '')); // 解码 base64
+        const content = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
         pluginsData = JSON.parse(content);
-        if (!Array.isArray(pluginsData)) throw new Error('JSON 格式错误，应为数组');
+        if (!Array.isArray(pluginsData)) throw new Error('JSON 格式错误');
         renderTable();
       } catch (err) {
         alert('加载插件数据失败: ' + err.message);
@@ -203,16 +246,7 @@
       });
     }
 
-    function escapeHtml(text) {
-      return String(text)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    // ==================== 添加/编辑 ====================
+    // 模态框操作
     function openAddModal() {
       document.getElementById('modalTitle').textContent = '添加插件';
       document.getElementById('pluginIndex').value = '';
@@ -233,11 +267,9 @@
     }
 
     function clearModalFields() {
-      document.getElementById('pluginTitle').value = '';
-      document.getElementById('pluginVersion').value = '';
-      document.getElementById('pluginMC').value = '';
-      document.getElementById('pluginDate').value = '';
-      document.getElementById('pluginURL').value = '';
+      ['pluginTitle','pluginVersion','pluginMC','pluginDate','pluginURL'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
     }
 
     function closeModal() {
@@ -270,57 +302,62 @@
       closeModal();
     });
 
-    // 删除
     async function deletePlugin(index) {
       if (!confirm('确定删除该插件吗？')) return;
       pluginsData.splice(index, 1);
       await saveToGitHub();
     }
 
-    // ==================== 核心：保存到 GitHub ====================
+    // 保存到 GitHub
     async function saveToGitHub() {
       const filePath = `${DATA_PATH}/${currentFile}.json`;
       const newContent = JSON.stringify(pluginsData, null, 2);
       try {
-        // 1. 获取当前文件的 sha（必须）
+        let sha = null;
         const getRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`, {
           headers: { Authorization: `token ${token}` }
         });
-        if (!getRes.ok) throw new Error('获取文件信息失败');
-        const fileData = await getRes.json();
-        const sha = fileData.sha;
+        
+        if (getRes.status === 200) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+        } else if (getRes.status === 404) {
+          console.log('文件不存在，将新建');
+        } else {
+          const errData = await getRes.json();
+          throw new Error('获取文件信息失败: ' + (errData.message || getRes.status));
+        }
 
-        // 2. 更新文件
+        const body = {
+          message: `更新 ${currentFile} 列表`,
+          content: b64EncodeUnicode(newContent),
+          branch: BRANCH
+        };
+        if (sha) body.sha = sha;
+
         const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}`, {
           method: 'PUT',
           headers: {
             Authorization: `token ${token}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            message: `更新 ${currentFile} 列表`,
-            content: btoa(unescape(encodeURIComponent(newContent))), // 转 base64
-            sha: sha,
-            branch: BRANCH
-          })
+          body: JSON.stringify(body)
         });
-        if (!putRes.ok) throw new Error('保存失败');
+
+        if (!putRes.ok) {
+          const errData = await putRes.json();
+          console.error('PUT 错误:', errData);
+          throw new Error(errData.message || '保存失败');
+        }
+
+        console.log('保存成功');
         alert('✅ 保存成功！网站将在几十秒内更新。');
         renderTable();
       } catch (err) {
+        console.error('保存异常:', err);
         alert('保存失败: ' + err.message);
       }
     }
-
-    // 工具函数：字符串转 base64（支持中文）
-    function btoaUTF8(str) {
-      return btoa(unescape(encodeURIComponent(str)));
-    }
-    // 修正上面的 saveToGitHub 中的 content 编码，用 btoaUTF8
-    // 重新定义 saveToGitHub 中的编码部分：
-    // 在 saveToGitHub 中，将 btoa(unescape(encodeURIComponent(newContent))) 替换为 btoaUTF8(newContent)
-    // 为免混乱，直接修改原函数中的那一行：
-    // 实际代码中已经使用了 btoa(unescape(encodeURIComponent(newContent)))，等价于 btoaUTF8。
   </script>
 </body>
 </html>
