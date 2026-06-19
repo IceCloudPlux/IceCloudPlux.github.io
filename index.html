@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IceCloud & Plux · 官网</title>
-    <!-- Cloudflare Turnstile -->
+    <!-- 同步加载 Turnstile，确保 window.turnstile 立即可用 -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -199,7 +199,6 @@
         .verify-overlay-hidden { opacity: 0; pointer-events: none; }
 
         /* ========== 原有网站样式 ========== */
-        /* 请将您之前的完整 CSS 粘贴到这里（导航、卡片、页脚等） */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #f0f4f8 0%, #e9eef3 100%);
@@ -434,7 +433,6 @@
             </section>
 
             <div class="plugin-grid" id="plugins">
-                <!-- IceCloud 卡片 -->
                 <div class="plugin-card">
                     <div class="card-header">
                         <div class="card-icon ice-icon">❄️</div>
@@ -455,7 +453,6 @@
                     <div class="version-badge">最新 2026-05-24 就绪</div>
                 </div>
 
-                <!-- Plux 卡片 -->
                 <div class="plugin-card">
                     <div class="card-header">
                         <div class="card-icon plux-icon">✨</div>
@@ -476,7 +473,6 @@
                     <div class="version-badge">最新 2026-07-06 正在开发</div>
                 </div>
 
-                <!-- 付费插件卡片 -->
                 <div class="plugin-card">
                     <div class="card-header">
                         <div class="card-icon premium-icon">💎</div>
@@ -522,7 +518,7 @@
 
     <script>
         (function() {
-            // ⚠️ 替换为你的 Cloudflare Turnstile Site Key
+            // 已更新为你的真实 Site Key
             const SITE_KEY = '0x4AAAAAADnifVGaRTV7QUMJ';
 
             const overlay = document.getElementById('verify-overlay');
@@ -537,6 +533,28 @@
             let isVerifying = false;
             let isSuccess = false;
             let showClickableTimer = null;
+
+            // 验证状态持久化：有效期 2 小时
+            const VERIFY_KEY = 'cf_verified';
+            const EXPIRE_KEY = 'cf_verified_time';
+            const VALID_DURATION = 2 * 60 * 60 * 1000; // 2小时
+
+            function isAlreadyVerified() {
+                const flag = localStorage.getItem(VERIFY_KEY);
+                const time = parseInt(localStorage.getItem(EXPIRE_KEY), 10);
+                if (flag === 'true' && time && (Date.now() - time < VALID_DURATION)) {
+                    return true;
+                }
+                // 清除过期数据
+                localStorage.removeItem(VERIFY_KEY);
+                localStorage.removeItem(EXPIRE_KEY);
+                return false;
+            }
+
+            function markAsVerified() {
+                localStorage.setItem(VERIFY_KEY, 'true');
+                localStorage.setItem(EXPIRE_KEY, Date.now().toString());
+            }
 
             function showCircleLoading() {
                 circle.style.display = 'flex';
@@ -607,6 +625,7 @@
                         callback: function(token) {
                             isSuccess = true;
                             isVerifying = false;
+                            markAsVerified();  // 持久化验证状态
                             showCircleSuccess();
                             textEl.textContent = '验证通过';
                             challengeArea.classList.remove('clickable');
@@ -651,11 +670,16 @@
                 }
             });
 
-            // 启动
-            textEl.textContent = '正在验证…';
-            showCircleLoading();
-            challengeArea.classList.remove('clickable');
-            startClickableTimer();
+            // 初始化：检查是否已经验证过
+            if (isAlreadyVerified()) {
+                overlay.style.display = 'none';
+                mainContent.style.display = 'block';
+            } else {
+                textEl.textContent = '正在验证…';
+                showCircleLoading();
+                challengeArea.classList.remove('clickable');
+                startClickableTimer();
+            }
         })();
     </script>
 </body>
