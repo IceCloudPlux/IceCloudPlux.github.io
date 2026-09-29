@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BedWarsHeypixel Wiki</title>
+<style>
+:root{
+  --bg:#ffffff; --bg-alt:#f6f8fa; --sidebar-bg:#f6f8fa;
+  --border:#d8dee4; --text:#1f2328; --muted:#656d76;
+  --accent:#0969da; --accent-soft:rgba(9,105,218,.1);
+  --code-bg:#f6f8fa; --code-text:#cf222e; --table-head:#f6f8fa;
+  --shadow:0 1px 3px rgba(27,31,36,.08);
+  --warn-bg:#fff8c5; --warn-border:#d4a72c; --warn-text:#4d2d00;
+  --info-bg:#ddf4ff; --info-border:#54aeff; --info-text:#0a3069;
+}
+[data-theme="dark"]{
+  --bg:#0d1117; --bg-alt:#161b22; --sidebar-bg:#010409;
+  --border:#30363d; --text:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff; --accent-soft:rgba(88,166,255,.15);
+  --code-bg:#161b22; --code-text:#ff7b72; --table-head:#161b22;
+  --shadow:0 1px 3px rgba(0,0,0,.5);
+  --warn-bg:#3a2d00; --warn-border:#9e6a03; --warn-text:#e3b341;
+  --info-bg:#0c2d6b; --info-border:#1f6feb; --info-text:#a5d6ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);line-height:1.75;
+  font-size:15px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
+  display:flex;align-items:center;gap:14px;padding:0 16px;
+  background:var(--bg);border-bottom:1px solid var(--border);
+}
+.menu-toggle{
+  display:none;background:none;border:1px solid var(--border);color:var(--text);
+  border-radius:6px;width:34px;height:34px;font-size:16px;cursor:pointer;line-height:1;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:600}
+.brand-logo{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,#0969da,#8250df);
+  color:#fff;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;letter-spacing:.5px;
+}
+.brand-text{font-size:15px;white-space:nowrap}
+.brand-text em{font-style:normal;color:var(--muted);font-weight:400;font-size:13px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.search-wrap{position:relative}
+#searchInput{
+  width:220px;height:34px;padding:0 12px;border-radius:8px;
+  border:1px solid var(--border);background:var(--bg-alt);color:var(--text);
+  font-size:13px;outline:none;font-family:inherit;transition:.15s;
+}
+#searchInput:focus{border-color:var(--accent);background:var(--bg);width:260px}
+.search-results{
+  position:absolute;top:42px;right:0;width:340px;max-height:380px;overflow-y:auto;
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);display:none;padding:6px;
+}
+.search-results.show{display:block}
+.sr-item{
+  display:block;padding:8px 10px;border-radius:6px;text-decoration:none;color:var(--text);
+  font-size:13px;cursor:pointer;
+}
+.sr-item:hover{background:var(--accent-soft)}
+.sr-item b{color:var(--accent);font-weight:600}
+.sr-item small{display:block;color:var(--muted);font-size:12px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.sr-empty{padding:12px;color:var(--muted);font-size:13px;text-align:center}
+.theme-toggle{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg-alt);color:var(--text);cursor:pointer;font-size:15px;line-height:1;
+}
+.theme-toggle:hover{border-color:var(--accent)}
+
+/* ---------- 布局 ---------- */
+.layout{display:flex;padding-top:56px}
+.sidebar{
+  position:fixed;top:56px;bottom:0;left:0;width:262px;overflow-y:auto;
+  background:var(--sidebar-bg);border-right:1px solid var(--border);
+  padding:18px 0 48px;z-index:90;
+}
+.sidebar::-webkit-scrollbar{width:8px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.nav-group{margin-bottom:6px}
+.nav-title{
+  padding:10px 20px 6px;font-size:11px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);
+}
+.nav-link{
+  display:block;padding:7px 20px 7px 22px;margin:1px 8px;border-radius:7px;
+  color:var(--text);text-decoration:none;font-size:14px;
+  border-left:2px solid transparent;transition:.12s;
+}
+.nav-link:hover{background:var(--accent-soft);color:var(--accent)}
+.nav-link.active{
+  background:var(--accent-soft);color:var(--accent);font-weight:600;
+  border-left-color:var(--accent);
+}
+.content{margin-left:262px;flex:1;min-width:0;padding:34px 44px 100px}
+.page{display:none;max-width:920px;margin:0 auto;animation:fade .22s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.backdrop{
+  display:none;position:fixed;inset:56px 0 0 0;background:rgba(0,0,0,.4);z-index:85;
+}
+.backdrop.show{display:block}
+
+/* ---------- 排版 ---------- */
+.page h1{
+  font-size:29px;margin:0 0 6px;font-weight:700;letter-spacing:-.01em;
+  padding-bottom:14px;border-bottom:1px solid var(--border);
+}
+.page h2{
+  font-size:21px;margin:38px 0 14px;font-weight:600;
+  padding-bottom:8px;border-bottom:1px solid var(--border);
+}
+.page h3{font-size:17px;margin:26px 0 10px;font-weight:600}
+.page h4{font-size:15px;margin:20px 0 8px;font-weight:600;color:var(--muted)}
+.page p{margin:0 0 14px}
+.lede{color:var(--muted);font-size:15px;margin-bottom:20px}
+.page ul,.page ol{margin:0 0 14px;padding-left:24px}
+.page li{margin:4px 0}
+.page a{color:var(--accent);text-decoration:none}
+.page a:hover{text-decoration:underline}
+.page hr{border:none;border-top:1px solid var(--border);margin:34px 0}
+
+code{
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  font-size:.87em;background:var(--code-bg);color:var(--code-text);
+  padding:.18em .4em;border-radius:5px;border:1px solid var(--border);
+}
+pre{
+  position:relative;background:var(--code-bg);border:1px solid var(--border);
+  border-radius:10px;padding:16px 18px;overflow-x:auto;margin:0 0 18px;
+  line-height:1.6;
+}
+pre code{
+  background:none;border:none;padding:0;color:var(--text);font-size:13px;white-space:pre;
+}
+.copy-btn{
+  position:absolute;top:8px;right:8px;padding:3px 10px;font-size:11px;
+  border:1px solid var(--border);border-radius:6px;background:var(--bg);
+  color:var(--muted);cursor:pointer;opacity:0;transition:.15s;font-family:inherit;
+}
+pre:hover .copy-btn{opacity:1}
+.copy-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+table{
+  width:100%;border-collapse:collapse;margin:0 0 20px;font-size:13.5px;
+  display:block;overflow-x:auto;white-space:nowrap;
+}
+table thead th{
+  background:var(--table-head);font-weight:600;text-align:left;
+  padding:9px 14px;border:1px solid var(--border);white-space:nowrap;
+}
+table td{padding:9px 14px;border:1px solid var(--border);vertical-align:top}
+table tbody tr:nth-child(even){background:var(--bg-alt)}
+table code{white-space:nowrap}
+
+blockquote,.callout{
+  margin:0 0 18px;padding:12px 18px;border-radius:8px;
+  border-left:4px solid var(--info-border);background:var(--info-bg);color:var(--info-text);
+}
+blockquote p:last-child,.callout p:last-child{margin-bottom:0}
+.callout-warn{background:var(--warn-bg);border-left-color:var(--warn-border);color:var(--warn-text)}
+.callout-info{background:var(--info-bg);border-left-color:var(--info-border);color:var(--info-text)}
+.callout strong{font-weight:700}
+
+.badge{
+  display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;
+  font-weight:600;background:var(--accent-soft);color:var(--accent);
+  border:1px solid transparent;vertical-align:middle;
+}
+.badge-new{background:rgba(26,127,55,.12);color:#1a7f37}
+[data-theme="dark"] .badge-new{background:rgba(63,185,80,.15);color:#3fb950}
+.badge-warn{background:rgba(212,167,44,.16);color:#9a6700}
+[data-theme="dark"] .badge-warn{background:rgba(212,167,44,.18);color:#d4a72c}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:0 0 22px}
+.card{
+  display:block;padding:16px;border:1px solid var(--border);border-radius:10px;
+  text-decoration:none;color:var(--text);background:var(--bg);
+  transition:.15s;box-shadow:var(--shadow);
+}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card b{display:block;color:var(--accent);margin-bottom:5px;font-size:14.5px}
+.card span{font-size:13px;color:var(--muted);line-height:1.55}
+
+.footer-nav{
+  margin-top:46px;padding-top:18px;border-top:1px solid var(--border);
+  font-size:13px;color:var(--muted);
+}
+.footer-nav a{color:var(--accent);text-decoration:none;margin-right:14px}
+
+/* ---------- 响应式 ---------- */
+@media(max-width:980px){
+  .menu-toggle{display:block}
+  .sidebar{transform:translateX(-100%);transition:transform .25s ease}
+  .sidebar.open{transform:translateX(0);box-shadow:6px 0 24px rgba(0,0,0,.18)}
+  .content{margin-left:0;padding:24px 18px 90px}
+  .brand-text{display:none}
+  #searchInput{width:130px}
+  #searchInput:focus{width:170px}
+  .search-results{width:min(340px,calc(100vw - 32px))}
+}
+@media(max-width:520px){
+  .page h1{font-size:23px}
+  .page h2{font-size:18px}
+  .content{padding:20px 14px 90px}
+  table{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 顶栏 ============ -->
+<header class="topbar">
+  <button class="menu-toggle" id="menuToggle" aria-label="菜单">☰</button>
+  <a class="brand" href="#home">
+    <span class="brand-logo">BW</span>
+    <span class="brand-text">BedWarsHeypixel <em>Wiki</em></span>
+  </a>
+  <div class="topbar-right">
+    <div class="search-wrap">
+      <input type="search" id="searchInput" placeholder="搜索…" autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- ============ 侧边栏 ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="nav-group">
+      <div class="nav-title">概览</div>
+      <a class="nav-link" href="#readme" data-route="readme">项目主页</a>
+      <a class="nav-link" href="#home" data-route="home">Wiki 总览</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-title">入门</div>
+      <a class="nav-link" href="#use" data-route="use">详细使用教程</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-title">参考文档</div>
+      <a class="nav-link" href="#config" data-route="config">配置文件详解</a>
+      <a class="nav-link" href="#commands" data-route="commands">指令与权限</a>
+      <a class="nav-link" href="#features" data-route="features">功能说明</a>
+      <a class="nav-link" href="#compat" data-route="compat">版本兼容性</a>
+      <a class="nav-link" href="#faq" data-route="faq">常见问题 FAQ</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-title">更新</div>
+      <a class="nav-link" href="#changelog" data-route="changelog">更新日志 26.9</a>
+    </div>
+  </aside>
+
+  <!-- ============ 内容区 ============ -->
+  <main class="content" id="content">
+
+  <!-- ======== 页面：项目主页 ======== -->
+  <section class="page" data-route="readme">
+    <h1>BedWarsHeypixel</h1>
+    <p class="lede">基于 BedWars1058 二次开发的新型插件 · 当前版本 <span class="badge">26.9</span></p>
+
+    <div class="callout callout-info">
+      <p>本插件经过原作者 <strong>andrei1058</strong> 授权，添加了诸多功能和内容，每个月至少更新 1~3 次。</p>
+    </div>
+
+    <h2>文档导航</h2>
+    <div class="card-grid">
+      <a class="card" href="#use"><b>详细使用教程</b><span>纯插件详细使用教程，从零开始安装、授权、搭建竞技场到配置全部新功能。</span></a>
+      <a class="card" href="#home"><b>Wiki 总览</b><span>配置详解 / 指令权限 / 功能说明 / 版本兼容 / FAQ 入口。</span></a>
+      <a class="card" href="#changelog"><b>更新日志 26.9</b><span>新增功能、BUG 修复、优化与配置文件变更一览。</span></a>
+    </div>
+
+    <h2>功能介绍（相对原版 1058）</h2>
+
+    <h3>道具部分</h3>
+    <h4>新增</h4>
+    <ul>
+      <li>救援平台</li>
+      <li>回城卷轴</li>
+      <li>防御墙</li>
+      <li>隐身药水（防止隐身根本看不见，我们为其添加了更大的粒子效果）</li>
+      <li>隐身增强（26.9：喝隐身药水后非队友完全不可见含手持物品，队友可见名字标签与专属粒子，蹲下隐藏粒子，<code>config.yml</code> 可配）</li>
+    </ul>
+    <h4>修改</h4>
+    <ul>
+      <li>烈焰弹配置修改（完全按照模组源码还原爆炸半径与击退手感）</li>
+      <li>隐身玩家名牌按队伍区分显示（BwTabList）</li>
+    </ul>
+
+    <h3>商店部分</h3>
+    <h4>新增</h4>
+    <ul>
+      <li>快捷栏预设（26.9 测试阶段功能，<code>fastbuy.yml</code>：快捷购买界面红石图标进入预设设置，为每个商店类别指定购买后物品自动放入的快捷栏槽位 0-8，目标格有物品则交换）</li>
+    </ul>
+    <h4>修改</h4>
+    <ul>
+      <li>Q 键添加 / 去除快捷购买，Shift+点击购买一组</li>
+      <li>Shift+点击购买一组按比例计价（26.9 修复：例羊毛 16 个 / 4 铁，买 64 个扣 16 铁，不再只扣 1 份资源）</li>
+    </ul>
+
+    <h3>模式部分</h3>
+    <h4>新增</h4>
+    <ul>
+      <li>经验模式</li>
+      <li>经验商店配置</li>
+      <li>经验队伍增益配置</li>
+      <li>经验转换配置</li>
+      <li>游戏开局副标题显示</li>
+      <li>10~6 秒标题显示</li>
+      <li>debug 调试模式下时间缩减</li>
+      <li>4、5 级钻石以及绿宝石资源点级别（26.9：<code>generators.yml</code> 内置 IV/V 级默认值，<code>config.yml</code> <code>generator-tier-4-5-enabled</code> 可整体关闭）</li>
+      <li>胜利后显示用时（26.9：<code>config.yml</code> <code>win-time-display</code> 开关，语言项 <code>GAME_END_WIN_TIME_SUBTITLE</code> 可自定义，<code>{team}</code> / <code>{time}</code> 占位符）</li>
+      <li>事件加血（26.9 新增，<code>healthadd.yml</code>：游戏开始后 1~4 次全体加血事件可配置或关闭，默认 2 次即 5/10 分钟各 +5 颗心，自动集成计分板事件倒计时，触发时全竞技场广播 + 音效）</li>
+      <li>游戏总时长限制（26.9 新增，<code>config.yml</code> <code>game-duration-limit</code>，默认 60 分钟，到时强制结算，<code>&lt;=0</code> 关闭）</li>
+      <li>重生时间减少增益开关（26.9 新增，<code>config.yml</code> <code>respawn-time-reduction-enabled</code>，默认开启，关闭后该团队升级不再生效）</li>
+      <li>等级显示模式切换（26.9 新增，<code>config.yml</code> <code>levels-display-mode</code>：fancy = 彩色阶数 / 星级，simple = 纯色简版）</li>
+      <li>变量 <code>{team}</code></li>
+      <li>新版本适配（26.9：支持 Minecraft 1.20.5 / 1.20.6 / 1.21 / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4）</li>
+      <li>语言精简（26.9：仅保留简体中文 zh_cn、繁体中文 zh_tw（新增）、英文 en）</li>
+    </ul>
+    <h4>修改</h4>
+    <ul>
+      <li>取消资源生成速率限制</li>
+      <li>取消挂机惩罚机制</li>
+      <li>计分板队伍状态显示（有床 / 团灭）</li>
+      <li>等级显示优化（阶数 / 星级）</li>
+      <li>debug 模式 <code>/bw time add</code> 修复（26.9：事件系统不再卡死，计数归零立即推进事件，倒计时钳制最小 1 秒，单次加时不超过当前阶段剩余时间，且每次最多推进到下一个事件，防止跳过床摧毁阶段）</li>
+      <li>ChunkLoad 监听器改回主线程执行（26.9 修复异步线程调用实体 API 的问题）</li>
+      <li>版本适配层重构（26.9：新增 <code>versionsupport_v1_21_R1/R2/R3</code>，1.20.5+ 适配器不再依赖带版本号的 CraftBukkit 包名，改用公开 Bukkit API + 运行时反射，物品标识用 PersistentDataContainer）</li>
+    </ul>
+
+    <h2>使用说明</h2>
+
+    <h3>环境要求</h3>
+    <table>
+      <thead><tr><th>项目</th><th>要求</th></tr></thead>
+      <tbody>
+        <tr><td>服务端</td><td>Spigot / Paper 及其兼容核心</td></tr>
+        <tr><td>版本支持</td><td>Minecraft <strong>1.8.8 ~ 1.21.4</strong>（含 1.20.5 / 1.20.6 / 1.21.x 系列，1.20.5+ 通过新适配器支持）</td></tr>
+        <tr><td>运行环境</td><td><strong>Java 11</strong> 或更高版本（1.20.5+ 服务端按其自身要求使用更高版本 Java；自行编译插件需 JDK 21）</td></tr>
+      </tbody>
+    </table>
+
+    <p>可选软依赖（不装也能运行，装上可解锁扩展功能）：</p>
+    <ul>
+      <li><strong>Vault</strong>：经济系统</li>
+      <li><strong>PlaceholderAPI</strong>：聊天 / 计分板变量</li>
+      <li><strong>Citizens</strong>：加入游戏 NPC</li>
+      <li><strong>Parties / PartyAndFriends / Spigot-Party-API-PAF</strong>：队伍系统</li>
+      <li><strong>SlimeWorldManager / AdvancedWorldManager</strong>：更快的世界地图加载与还原</li>
+    </ul>
+
+    <h3>安装与授权</h3>
+    <ol>
+      <li>将插件 jar 文件放入服务端的 <code>plugins</code> 文件夹。</li>
+      <li>启动一次服务端，让插件生成配置文件和语言文件，然后停止服务端。</li>
+      <li>编辑 <code>plugins/BedWarsHeypixel/config.yml</code>：
+        <ul>
+          <li>在 <code>license-key</code> 中填入你的<strong>授权密钥</strong>（本插件为付费授权插件，无有效密钥无法启动）。</li>
+          <li>根据你的服务器规模设置 <code>serverType</code>（<code>MULTIARENA</code> / <code>SHARED</code> / <code>BUNGEE</code>）。</li>
+          <li>设置默认 <code>language</code> 语言。</li>
+        </ul>
+      </li>
+      <li>重新启动服务端，等待授权验证通过后插件即可正常启用。<br>授权密钥为空、无效或校验失败时，插件会输出错误日志并自动禁用。</li>
+      <li>使用 <code>/bw setLobby</code> 设置主大厅，再按下方“竞技场搭建”创建地图。</li>
+    </ol>
+    <blockquote><p>提示：每次修改配置文件后可使用 <code>/bw reload</code> 热重载，无需重启服务端。</p></blockquote>
+
+    <h3>配置文件</h3>
+    <p>插件首次启动后会在 <code>plugins/BedWarsHeypixel/</code> 下生成以下配置：</p>
+    <table>
+      <thead><tr><th>文件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>config.yml</code></td><td>主配置：服务器类型、语言、授权密钥、数据库、游戏时间与倒计时、开关选项等（26.9 新增：<code>game-duration-limit</code>、<code>win-time-display</code>、<code>respawn-time-reduction-enabled</code>、<code>generator-tier-4-5-enabled</code>、<code>levels-display-mode</code>、<code>invisibility-enhance.*</code>）</td></tr>
+        <tr><td><code>shop.yml</code></td><td>常规商店配置（含快捷购买默认槽位）</td></tr>
+        <tr><td><code>shopxp.yml</code></td><td>经验商店配置（经验模式专用）</td></tr>
+        <tr><td><code>fastbuy.yml</code></td><td>快捷栏预设配置（26.9 新增，测试阶段功能）</td></tr>
+        <tr><td><code>healthadd.yml</code></td><td>全体加血事件配置（26.9 新增）</td></tr>
+        <tr><td><code>upgrades2.yml</code> / <code>upgrades3.yml</code></td><td>队伍升级配置</td></tr>
+        <tr><td><code>generators.yml</code></td><td>资源生成器配置（铁、金、钻石、绿宝石生成速度与等级，26.9 新增钻石 / 绿宝石 IV/V 级配置节）</td></tr>
+        <tr><td><code>signs.yml</code></td><td>加入游戏牌子配置</td></tr>
+        <tr><td><code>levels.yml</code></td><td>等级经验配置（升级所需经验、奖励等）</td></tr>
+        <tr><td>语言文件夹</td><td>各语言的提示消息（仅 zh_cn / zh_tw / en，支持 <code>/bw lang</code> 切换）</td></tr>
+      </tbody>
+    </table>
+
+    <h3>常用命令</h3>
+    <p>主命令为 <code>/bw</code>（别名 <code>/bedwars</code>、<code>/bedwars1058</code>）。</p>
+
+    <h4>玩家命令</h4>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>/bw cmds</code></td><td>查看所有可用命令</td></tr>
+        <tr><td><code>/bw join &lt;地图/组名/random&gt;</code></td><td>加入指定地图、地图组或随机加入</td></tr>
+        <tr><td><code>/bw leave</code></td><td>离开当前游戏</td></tr>
+        <tr><td><code>/bw gui &lt;组名&gt;</code></td><td>打开竞技场选择 GUI</td></tr>
+        <tr><td><code>/bw lang</code></td><td>切换个人语言</td></tr>
+        <tr><td><code>/bw stats</code></td><td>查看个人战绩</td></tr>
+        <tr><td><code>/bw teleporter</code></td><td>打开观战传送菜单</td></tr>
+        <tr><td><code>/bw tp &lt;玩家&gt;</code></td><td>传送到指定玩家</td></tr>
+      </tbody>
+    </table>
+
+    <h4>管理命令（需对应权限）</h4>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th><th>权限</th></tr></thead>
+      <tbody>
+        <tr><td><code>/bw setLobby</code></td><td>设置主大厅出生点</td><td><code>bw.setup</code></td></tr>
+        <tr><td><code>/bw start</code> / <code>/bw forceStart</code></td><td>强制开始游戏（带 <code>debug</code> 参数可进入调试模式并缩短开局倒计时）</td><td><code>bw.forcestart</code></td></tr>
+        <tr><td><code>/bw time add &lt;秒&gt;</code></td><td>为当前游戏增加时间</td><td><code>bw.*</code></td></tr>
+        <tr><td><code>/bw level setLevel &lt;玩家&gt; &lt;等级&gt;</code></td><td>设置玩家等级</td><td><code>bw.level</code></td></tr>
+        <tr><td><code>/bw level giveXp &lt;玩家&gt; &lt;经验&gt;</code></td><td>给玩家添加经验</td><td><code>bw.level</code></td></tr>
+        <tr><td><code>/bw reload</code></td><td>热重载全部配置文件</td><td><code>bw.reload</code></td></tr>
+        <tr><td><code>/bw setupArena &lt;名称&gt;</code></td><td>进入竞技场搭建模式</td><td><code>bw.setup</code></td></tr>
+        <tr><td><code>/bw arenaList</code></td><td>查看所有竞技场列表</td><td><code>bw.setup</code></td></tr>
+        <tr><td><code>/bw delArena &lt;名称&gt;</code></td><td>删除竞技场</td><td><code>bw.delete</code></td></tr>
+        <tr><td><code>/bw enableArena &lt;名称&gt;</code></td><td>启用竞技场</td><td><code>bw.enableRotation</code></td></tr>
+        <tr><td><code>/bw disableArena &lt;名称&gt;</code></td><td>禁用竞技场</td><td><code>bw.disable</code></td></tr>
+        <tr><td><code>/bw cloneArena &lt;源&gt; &lt;目标&gt;</code></td><td>复制竞技场</td><td><code>bw.clone</code></td></tr>
+        <tr><td><code>/bw arenaGroup &lt;组名&gt; [add/remove]</code></td><td>管理竞技场分组</td><td><code>bw.groups</code></td></tr>
+        <tr><td><code>/bw build</code></td><td>切换建造模式（脱离游戏保护范围）</td><td><code>bw.build</code></td></tr>
+        <tr><td><code>/bw npc</code></td><td>创建加入游戏 NPC（需安装 Citizens）</td><td><code>bw.npc</code></td></tr>
+      </tbody>
+    </table>
+
+    <h4>竞技场搭建命令（进入 <code>/bw setupArena</code> 后在对应世界内使用）</h4>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>/bw autoCreateTeams &lt;数量&gt;</code></td><td>自动创建指定数量的队伍</td></tr>
+        <tr><td><code>/bw createTeam &lt;颜色&gt;</code> / <code>/bw removeTeam &lt;颜色&gt;</code></td><td>创建 / 移除队伍</td></tr>
+        <tr><td><code>/bw setSpawn &lt;颜色&gt;</code></td><td>设置队伍出生点</td></tr>
+        <tr><td><code>/bw setBed &lt;颜色&gt;</code></td><td>设置队伍床的位置</td></tr>
+        <tr><td><code>/bw setShop &lt;队伍颜色&gt;</code></td><td>设置队伍商店位置</td></tr>
+        <tr><td><code>/bw setUpgrade &lt;队伍颜色&gt;</code></td><td>设置队伍升级 NPC 位置</td></tr>
+        <tr><td><code>/bw setWaitingSpawn</code></td><td>设置等待大厅出生点</td></tr>
+        <tr><td><code>/bw waitingPos</code></td><td>设置等待大厅位置</td></tr>
+        <tr><td><code>/bw setSpectSpawn</code></td><td>设置观战出生点</td></tr>
+        <tr><td><code>/bw setMaxInTeam &lt;数量&gt;</code></td><td>设置队伍最大人数</td></tr>
+        <tr><td><code>/bw setMaxBuildHeight &lt;高度&gt;</code></td><td>设置最大建造高度</td></tr>
+        <tr><td><code>/bw addGenerator &lt;类型&gt;</code> / <code>/bw removeGenerator &lt;类型&gt;</code></td><td>添加 / 移除资源生成器</td></tr>
+        <tr><td><code>/bw setType &lt;类型&gt;</code></td><td>设置竞技场类型（Solo/4v4 等）</td></tr>
+        <tr><td><code>/bw gameMode &lt;模式&gt;</code></td><td>设置游戏模式</td></tr>
+        <tr><td><code>/bw setKillDrops</code></td><td>设置击杀掉落物位置</td></tr>
+        <tr><td><code>/bw save</code></td><td>保存竞技场</td></tr>
+      </tbody>
+    </table>
+
+    <h3>权限列表</h3>
+    <table>
+      <thead><tr><th>权限</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>bw.*</code></td><td>所有权限</td></tr>
+        <tr><td><code>bw.setup</code></td><td>搭建 / 管理竞技场</td></tr>
+        <tr><td><code>bw.reload</code></td><td>重载配置</td></tr>
+        <tr><td><code>bw.forcestart</code></td><td>强制开始游戏</td></tr>
+        <tr><td><code>bw.build</code></td><td>游戏内建造权限</td></tr>
+        <tr><td><code>bw.delete</code></td><td>删除竞技场</td></tr>
+        <tr><td><code>bw.clone</code></td><td>复制竞技场</td></tr>
+        <tr><td><code>bw.enableRotation</code> / <code>bw.disable</code></td><td>启用 / 禁用竞技场</td></tr>
+        <tr><td><code>bw.groups</code></td><td>管理竞技场分组</td></tr>
+        <tr><td><code>bw.npc</code></td><td>创建加入 NPC</td></tr>
+        <tr><td><code>bw.level</code></td><td>管理玩家等级经验</td></tr>
+        <tr><td><code>bw.rejoin</code></td><td>断线重连权限</td></tr>
+        <tr><td><code>bw.shout</code></td><td>全服喊话</td></tr>
+        <tr><td><code>bw.vip</code></td><td>加入满员游戏（将非 VIP 玩家踢出）</td></tr>
+        <tr><td><code>bw.chatcolor</code></td><td>聊天颜色权限</td></tr>
+        <tr><td><code>bw.cmd.bypass</code></td><td>命令绕过权限</td></tr>
+      </tbody>
+    </table>
+
+    <h3>经验模式说明</h3>
+    <ul>
+      <li>在 <code>config.yml</code> 中开启经验模式后，游戏内拾取的资源（铁锭、金锭、钻石、绿宝石）会按照<strong>经验转换配置</strong>的比例自动转换为经验。</li>
+      <li>玩家可在 <strong>经验商店</strong>（<code>shopxp.yml</code>）中使用经验购买物品。</li>
+      <li>队伍升级包含<strong>经验队伍增益配置</strong>，通过队伍经验提升全队增益效果。</li>
+      <li>经验模式同样支持击杀、胜利等行为获得经验，具体奖励可在 <code>levels.yml</code> 中调整。</li>
+    </ul>
+
+    <h3>新道具玩法说明</h3>
+    <ul>
+      <li><strong>救援平台</strong>：在悬空时使用，脚下生成 5×5 镂空十字粘液块平台，可抵消跌落伤害，平台持续 15 秒后消失，且不可被破坏。</li>
+      <li><strong>回城卷轴</strong>：使用后进入 5 秒回城倒计时（伴有粒子特效），期间移动或丢弃物品会取消，倒计时结束后传送回队伍出生点。</li>
+      <li><strong>防御墙</strong>：在面前生成 3×5 的砂岩墙体，支持斜向放置；前方被遮挡时会自动回退到身后生成。</li>
+      <li><strong>隐身药水</strong>：提供隐身效果，并添加了更大的粒子效果，避免“隐身根本看不见”的问题。</li>
+    </ul>
+
+    <h3>常见问题</h3>
+    <p><strong>Q：插件启动时报错 "No license key configured"？</strong><br>
+    A：请在 <code>config.yml</code> 的 <code>license-key</code> 中填写有效的授权密钥，并重启服务端。</p>
+    <p><strong>Q：修改了配置需要重启服务端吗？</strong><br>
+    A：不需要，直接使用 <code>/bw reload</code> 即可热重载全部配置。</p>
+    <p><strong>Q：支持哪些版本？</strong><br>
+    A：支持 Minecraft 1.8.8 ~ 1.21.4 的 Spigot / Paper 服务端，需要 Java 11+（1.20.5+ 通过新适配器支持；注意 1.20.5+ 物品标识改用 PersistentDataContainer，与旧版本物品 tag 不互通，银鲛鱼 / 铁傀儡召唤物在 1.20.5+ 使用原版 AI，行为略有差异）。</p>
+    <p><strong>Q：如何快速搭建一个竞技场？</strong><br>
+    A：依次执行 <code>/bw setLobby</code> → <code>/bw setupArena &lt;名称&gt;</code> → <code>/bw autoCreateTeams &lt;数量&gt;</code> → 在世界中按搭建命令设置出生点、床、商店、资源生成器等 → <code>/bw save</code> → <code>/bw enableArena &lt;名称&gt;</code>。</p>
+    <p><strong>Q：事件加血、快捷栏预设等 26.9 新功能在哪配置？</strong><br>
+    A：事件加血在 <code>healthadd.yml</code>，快捷栏预设（测试阶段）在 <code>fastbuy.yml</code>，游戏总时长限制、隐身增强、4/5 级资源点开关等在 <code>config.yml</code>。详见 <a href="#config">配置文件详解</a> 与 <a href="#use">详细使用教程</a>。</p>
+
+    <hr>
+    <p class="lede">本项目基于 <a href="https://github.com/andrei1058/BedWars1058" target="_blank" rel="noopener">BedWars1058</a>（GNU GPL v3）二次开发，由 andrei1058 授权。</p>
+
+    <div class="footer-nav">
+      <a href="#home">Wiki 总览</a><a href="#use">详细使用教程</a><a href="#changelog">更新日志</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：Wiki 总览 ======== -->
+  <section class="page" data-route="home">
+    <h1>BedWarsHeypixel Wiki — 总览</h1>
+    <p class="lede">欢迎使用 <strong>BedWarsHeypixel</strong>（基于 BedWars1058 二次开发，经原作者 andrei1058 授权）的 Wiki。</p>
+
+    <p>本 Wiki 面向服主与管理员，覆盖配置、指令、功能与版本兼容等内容。新手服主建议先阅读 <a href="#use">详细使用教程</a>，再按需查阅下列分页。</p>
+
+    <h2>当前版本：26.9</h2>
+    <ul>
+      <li>支持 Minecraft <strong>1.8.8 ~ 1.21.4</strong></li>
+      <li>26.9 重点：新版本适配（1.20.5 ~ 1.21.4）、快捷栏预设（测试阶段）、事件加血、隐身增强、游戏总时长限制</li>
+      <li>完整变更见 <a href="#changelog">CHANGELOG-26.9</a></li>
+    </ul>
+
+    <h2>Wiki 目录</h2>
+    <table>
+      <thead><tr><th>页面</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td><a href="#config">配置文件详解</a></td><td><code>config.yml</code>、<code>healthadd.yml</code>、<code>fastbuy.yml</code>、<code>generators.yml</code> 等全部配置项与示例</td></tr>
+        <tr><td><a href="#commands">指令与权限</a></td><td><code>/bw</code> 主命令全部子命令、独立命令、竞技场搭建命令与权限节点</td></tr>
+        <tr><td><a href="#features">功能说明</a></td><td>快捷栏预设、事件加血、隐身增强、4/5 级资源点等 26.9 功能及原有特色功能详解</td></tr>
+        <tr><td><a href="#compat">版本兼容性</a></td><td>支持的服务端版本、1.20.5+ 注意事项、构建环境要求</td></tr>
+        <tr><td><a href="#faq">常见问题 FAQ</a></td><td>授权、重载、搭建、新功能相关的常见问题</td></tr>
+      </tbody>
+    </table>
+
+    <h2>快速上手三步走</h2>
+    <ol>
+      <li>将插件 jar 放入 <code>plugins</code> 文件夹，启动一次生成配置后关闭，在 <code>plugins/BedWarsHeypixel/config.yml</code> 填入 <code>license-key</code> 授权密钥。</li>
+      <li>设置 <code>serverType</code>（<code>MULTIARENA</code> / <code>SHARED</code> / <code>BUNGEE</code>）与 <code>language</code>（可选 <code>zh_cn</code> / <code>zh_tw</code> / <code>en</code>）。</li>
+      <li><code>/bw setLobby</code> 设置主大厅 → <code>/bw setupArena &lt;名称&gt;</code> 搭建竞技场 → <code>/bw save</code> → <code>/bw enableArena &lt;名称&gt;</code>。</li>
+    </ol>
+    <p>详细步骤见 <a href="#use">详细使用教程</a>。</p>
+
+    <h2>26.9 新功能速览</h2>
+    <table>
+      <thead><tr><th>功能</th><th>配置位置</th><th>默认状态</th></tr></thead>
+      <tbody>
+        <tr><td>快捷栏预设（测试阶段）</td><td><code>fastbuy.yml</code></td><td>开启（<code>enabled: true</code>）</td></tr>
+        <tr><td>事件加血</td><td><code>healthadd.yml</code></td><td>开启，2 次（5/10 分钟，各 +5 颗心）</td></tr>
+        <tr><td>游戏总时长限制</td><td><code>config.yml</code> → <code>game-duration-limit</code></td><td>60 分钟</td></tr>
+        <tr><td>隐身增强</td><td><code>config.yml</code> → <code>invisibility-enhance.*</code></td><td>开启</td></tr>
+        <tr><td>4/5 级资源点</td><td><code>generators.yml</code> + <code>config.yml</code> → <code>generator-tier-4-5-enabled</code></td><td>开启</td></tr>
+        <tr><td>胜利用时显示</td><td><code>config.yml</code> → <code>win-time-display</code></td><td>开启</td></tr>
+        <tr><td>重生时间减少开关</td><td><code>config.yml</code> → <code>respawn-time-reduction-enabled</code></td><td>开启</td></tr>
+        <tr><td>等级显示模式</td><td><code>config.yml</code> → <code>levels-display-mode</code></td><td><code>fancy</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="footer-nav">
+      <a href="#config">配置文件详解</a><a href="#commands">指令与权限</a><a href="#features">功能说明</a><a href="#compat">版本兼容性</a><a href="#faq">常见问题</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：详细使用教程 ======== -->
+  <section class="page" data-route="use">
+    <h1>纯插件详细使用教程</h1>
+    <p class="lede">本教程面向服主，从零开始带你完成安装、授权、搭建竞技场到配置 26.9 全部新功能的完整流程。更细的配置项说明见 <a href="#config">配置文件详解</a>，指令与权限全表见 <a href="#commands">指令与权限</a>。</p>
+
+    <h2>一、环境要求</h2>
+    <table>
+      <thead><tr><th>项目</th><th>要求</th></tr></thead>
+      <tbody>
+        <tr><td>服务端核心</td><td>Spigot / Paper 及其兼容核心</td></tr>
+        <tr><td>Minecraft 版本</td><td><strong>1.8.8 ~ 1.21.4</strong>（26.9 新增支持 1.20.5 / 1.20.6 / 1.21 / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4）</td></tr>
+        <tr><td>Java</td><td>11 或更高（1.20.5+ 核心按其自身要求，通常为 Java 21）</td></tr>
+        <tr><td>自行编译插件</td><td>需要 JDK 21</td></tr>
+      </tbody>
+    </table>
+
+    <p>可选软依赖（不装也能运行，装上可解锁扩展功能）：</p>
+    <ul>
+      <li><strong>Vault</strong>：经济系统</li>
+      <li><strong>PlaceholderAPI</strong>：聊天 / 计分板变量</li>
+      <li><strong>Citizens</strong>：加入游戏 NPC</li>
+      <li><strong>Parties / PartyAndFriends / Spigot-Party-API-PAF</strong>：队伍系统</li>
+      <li><strong>SlimeWorldManager / AdvancedWorldManager</strong>：更快的世界地图加载与还原</li>
+    </ul>
+
+    <blockquote><p>1.20.5+ 版本注意：物品标识改用 PersistentDataContainer（与旧版本物品 tag 不互通）；银鲛鱼 / 铁傀儡召唤物使用原版 AI，行为略有差异。</p></blockquote>
+
+    <h2>二、下载与安装</h2>
+    <ol>
+      <li>获取 BedWarsHeypixel 26.9 插件 jar 文件。</li>
+      <li>将 jar 放入服务端的 <code>plugins</code> 文件夹。</li>
+      <li>（可选）安装上述软依赖插件。</li>
+      <li>启动服务端。</li>
+    </ol>
+
+    <h2>三、首次启动</h2>
+    <ol>
+      <li>启动服务端，插件会尝试生成配置文件与语言文件。</li>
+      <li>首次启动时 <code>license-key</code> 为空，插件会输出 "No license key configured" 之类的错误日志并自动禁用——<strong>这是正常现象</strong>，先停止服务端进行下一步配置。</li>
+      <li>确认 <code>plugins/BedWarsHeypixel/</code> 目录下已生成：
+        <ul>
+          <li><code>config.yml</code>（主配置）</li>
+          <li><code>shop.yml</code> / <code>shopxp.yml</code> / <code>fastbuy.yml</code> / <code>healthadd.yml</code></li>
+          <li><code>upgrades2.yml</code> / <code>upgrades3.yml</code> / <code>generators.yml</code> / <code>signs.yml</code> / <code>levels.yml</code></li>
+          <li>语言文件夹</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h2>四、授权激活</h2>
+    <p>本插件为<strong>付费授权插件</strong>，无有效密钥无法启动。</p>
+    <ol>
+      <li>编辑 <code>plugins/BedWarsHeypixel/config.yml</code>：
+<pre><code>license-key: "你的授权密钥"    # 填入购买获得的密钥</code></pre>
+      </li>
+      <li>同时确认服务器类型（决定本插件的工作模式）：
+<pre><code>serverType: MULTIARENA   # MULTIARENA=多竞技场综合服 / SHARED=与其他插件共存 / BUNGEE=BungeeCord 专用</code></pre>
+      </li>
+      <li>重启服务端，等待授权验证通过后插件正常启用。密钥为空、无效或校验失败时，插件会输出错误日志并自动禁用。</li>
+      <li>授权通过后，控制台 / 日志中可以看到插件版本与启用成功信息。</li>
+    </ol>
+    <div class="callout callout-warn">
+      <p>⚠️ 授权验证发生在插件启用阶段，修改密钥后必须<strong>重启服务端</strong>，<code>/bw reload</code> 不能代替。</p>
+    </div>
+
+    <h2>五、语言选择</h2>
+    <p>26.9 起语言系统仅保留三种：<strong>简体中文（zh_cn）</strong>、<strong>繁体中文（zh_tw，26.9 新增）</strong>、<strong>英文（en）</strong>。</p>
+    <ol>
+      <li>编辑 <code>config.yml</code> 设置服务器默认语言：
+<pre><code>language: zh_cn</code></pre>
+      </li>
+      <li>重启服务端或执行 <code>/bw reload</code>。</li>
+      <li>玩家可用 <code>/bw lang</code> 切换自己的个人语言（同样只有三种可选）。</li>
+    </ol>
+    <p>所有提示消息可在语言文件夹对应文件（如 <code>zh_cn</code>）中修改。例如 26.9 新增的胜利副标题：</p>
+<pre><code>GAME_END_WIN_TIME_SUBTITLE: "&amp;a&amp;l{team} &amp;7获得胜利, 用时 &amp;f{time}"</code></pre>
+
+    <h2>六、创建竞技场（/bw setup 流程）</h2>
+    <p>以下流程在 <code>MULTIARENA</code> 模式下操作。准备一张建好的地图世界（每个队伍区域包含出生点、床、商店位、资源点，以及一个等待大厅区域）。</p>
+
+    <h3>第 1 步：设置主大厅</h3>
+    <p>在大厅世界站好位置后执行：</p>
+<pre><code>/bw setLobby</code></pre>
+    <blockquote><p>BUNGEE 模式下无需设置主大厅。</p></blockquote>
+
+    <h3>第 2 步：进入搭建模式</h3>
+    <p>在要制作为竞技场的地图世界内执行：</p>
+<pre><code>/bw setupArena arena1</code></pre>
+    <p>进入搭建会话后，你会在该世界内获得搭建工具与提示。</p>
+
+    <h3>第 3 步：创建队伍</h3>
+    <p>推荐自动创建（例如 4 队）：</p>
+<pre><code>/bw autoCreateTeams 4</code></pre>
+    <p>或手动创建 / 移除：</p>
+<pre><code>/bw createTeam red
+/bw removeTeam red</code></pre>
+    <p>设置每队人数与最大建造高度：</p>
+<pre><code>/bw setMaxInTeam 4       # 每队 4 人（如 4v4v4v4）
+/bw setMaxBuildHeight 128</code></pre>
+
+    <h3>第 4 步：设置等待与观战区域</h3>
+    <p>站在等待大厅内 / 门口分别执行：</p>
+<pre><code>/bw setWaitingSpawn      # 等待大厅出生点（玩家排队站立位置）
+/bw waitingPos           # 等待大厅区域（两个对角点各执行一次）
+/bw setSpectSpawn        # 观战出生点</code></pre>
+
+    <h3>第 5 步：设置队伍要素（每队各做一遍）</h3>
+    <p>走到对应位置后执行（<code>red</code> 换成实际队伍颜色）：</p>
+<pre><code>/bw setSpawn red         # 队伍出生点
+/bw setBed red           # 看向床执行，设置床位置
+/bw setShop red          # 站在商店 NPC 位执行
+/bw setUpgrade red       # 站在队伍升级 NPC 位执行</code></pre>
+
+    <h3>第 6 步：添加资源生成器</h3>
+    <p>站在铁 / 金 / 钻石 / 绿宝石生成点执行：</p>
+<pre><code>/bw addGenerator iron
+/bw addGenerator gold
+/bw addGenerator diamond
+/bw addGenerator emerald</code></pre>
+    <p>放错了可移除：<code>/bw removeGenerator iron</code>。</p>
+
+    <h3>第 7 步：其他设置与保存</h3>
+<pre><code>/bw setType 4v4v4v4      # 设置竞技场类型（队伍规模）
+/bw setKillDrops         # 站在期望位置执行，设置击杀掉落物点
+/bw save                 # 保存竞技场并退出搭建会话</code></pre>
+
+    <h3>第 8 步：启用竞技场</h3>
+<pre><code>/bw arenaList            # 确认 arena1 已保存（默认禁用）
+/bw enableArena arena1   # 启用后玩家即可加入</code></pre>
+    <p>之后玩家通过 <code>/bw join arena1</code>、牌子或 <code>/bw gui</code> 加入游戏。</p>
+
+    <h3>调试技巧（26.9 修复后可放心使用）</h3>
+<pre><code>/bw start debug          # 进入调试模式，开局倒计时缩短
+/bw time add 600         # 事件倒计时加 600 秒，快速推进到下一个事件</code></pre>
+    <p>26.9 修复：<code>/bw time add</code> 不再导致事件卡死；计数归零立即推进事件，且<strong>每次最多推进到下一个事件</strong>（不会跳过床摧毁阶段），重复输入可继续推进。</p>
+
+    <h2>七、商店 / 快捷购买 / 快捷栏预设</h2>
+
+    <h3>商店配置编辑</h3>
+    <p>商店内容在 <code>plugins/BedWarsHeypixel/shop.yml</code>（常规商店）/ <code>shopxp.yml</code>（经验商店）中编辑，保存后 <code>/bw reload</code> 生效。结构为：分类（category）→ 展示物品 → 等级（tier）→ 商品项（价格、货币、实际给到的物品等）。</p>
+    <blockquote><p>26.9 变更：<code>shopxp.yml</code> 不再自动生成“下界合金剑”与“石中剑 EX”两项（下界合金套装保留）。</p></blockquote>
+    <p>玩家侧操作：</p>
+    <ul>
+      <li>打开队伍商店，<strong>Q 键</strong>将光标所指商品添加 / 移除快捷购买。</li>
+      <li><strong>Shift+点击</strong>购买一组。26.9 起按比例计价：例如羊毛 16 个卖 4 铁，Shift+点击买 64 个扣 16 铁（修复了旧版只扣 1 份资源的问题）。</li>
+    </ul>
+
+    <h3>快捷栏预设（26.9 新增，测试阶段功能）</h3>
+    <p><strong>开启 / 关闭</strong>（<code>fastbuy.yml</code>）：</p>
+<pre><code>enabled: true    # 改为 false 可整体关闭该功能</code></pre>
+
+    <p><strong>玩家使用流程</strong>：</p>
+    <ol>
+      <li>打开商店的快捷购买界面，界面中有一个<strong>红石图标</strong>（默认在槽位 45）。</li>
+      <li>点击红石图标，进入“快捷栏预设设置”界面。</li>
+      <li>界面中列出各个商店类别，显示当前设置的槽位（未设置为“未设置”）。</li>
+      <li>点击某类别 → 在“选择快捷栏槽位”界面点击快捷栏 0-8 之一 → 设置完成。</li>
+      <li>之后购买该类别的物品时，物品会<strong>自动移入指定快捷栏槽位</strong>；若目标槽位已有物品则与之<strong>交换</strong>。</li>
+      <li>点击<strong>屏障按钮</strong>可清除该类别的设置，点击<strong>返回</strong>回到上一界面。</li>
+    </ol>
+
+    <p><strong>自定义入口图标与界面文本</strong>（<code>fastbuy.yml</code> 完整示例）：</p>
+<pre><code>enabled: true
+icon:
+  slot: 45              # 红石图标槽位（0-53）
+  material: REDSTONE
+  data: 0
+  name: "&amp;c快捷栏预设"
+  lore:
+    - "&amp;7为每个商店类别设置购买后"
+    - "&amp;7物品自动放入的快捷栏槽位"
+gui:
+  title: "&amp;8快捷栏预设设置"
+  pick-title: "&amp;8选择快捷栏槽位"
+  category-lore:
+    - "&amp;7当前槽位: {slot}"
+    - ""
+    - "&amp;e点击设置"
+  none-text: "未设置"
+  slot-item-name: "&amp;a快捷栏 {slot}"
+  clear-name: "&amp;c清除该类别设置"
+  clear-material: BARRIER
+  back-name: "&amp;c返回"</code></pre>
+
+    <div class="callout callout-warn">
+      <p>⚠️ 测试阶段功能：预设数据按玩家保存在内存中，玩家重进服务器后需重新设置。不稳定时可 <code>enabled: false</code> 关闭。</p>
+    </div>
+
+    <h2>八、26.9 各功能配置方法</h2>
+    <p>以下均在 <code>plugins/BedWarsHeypixel/</code> 下编辑对应文件，改完执行 <code>/bw reload</code>。</p>
+
+    <h3>1. 事件加血（healthadd.yml）</h3>
+    <p>游戏开始后定时对全场存活玩家加血，防止后期被一波打崩。默认 2 次（第 5、10 分钟各 +5 颗心）。</p>
+<pre><code>health-add:
+  enabled: true
+  default-amount: 10          # 单位：半心，10 = 5 颗心
+  events:                     # 可配 1~4 次，每次时间与血量可单独配置
+    1:
+      time-minutes: 5
+      time-seconds: 0
+      amount: 10
+    2:
+      time-minutes: 10
+      time-seconds: 0
+      amount: 10</code></pre>
+    <ul>
+      <li>想改加血时间：改 <code>time-minutes</code> / <code>time-seconds</code>（如 <code>time-minutes: 3, time-seconds: 30</code> = 3 分 30 秒）。</li>
+      <li>想改加血量：改 <code>amount</code>（半心；<code>amount: 6</code> = +3 颗心）。</li>
+      <li>想加到 4 次：仿照格式新增 <code>3:</code>、<code>4:</code> 条目。</li>
+      <li>想关闭：<code>enabled: false</code>。</li>
+      <li>触发时全竞技场广播 <code>&amp;a全体加血 &amp;7(+{hearts} 颗心)</code> 并播放音效（文案可在语言文件改）。</li>
+      <li>计分板自动集成：加血时间早于下一个事件链事件时，事件行显示加血倒计时。</li>
+    </ul>
+
+    <h3>2. 游戏总时长限制（config.yml）</h3>
+<pre><code>game-duration-limit: 60   # 分钟；到时强制结算；&lt;=0 关闭</code></pre>
+
+    <h3>3. 隐身增强（config.yml）</h3>
+<pre><code>invisibility-enhance:
+  enabled: true           # 开启后：非队友完全看不到隐身玩家（含手持物品）；
+                          # 队友可见头顶名字标签；未蹲下时向队友发送粒子，蹲下即隐藏
+  particle-interval: 4    # 粒子发送间隔（tick）
+  particle-amount: 3      # 每次粒子数量</code></pre>
+    <p>粒子仅发送给队友，降低网络开销；Tab 名牌按队伍区分显示。</p>
+
+    <h3>4. 4/5 级资源点（generators.yml + config.yml）</h3>
+    <p><code>generators.yml</code> 的 <code>Default</code> 节：</p>
+<pre><code>Default:
+  diamond:
+    tierIV:
+      delay: 12
+      amount: 1
+      spawn-limit: 8
+      start: 1800          # IV 级出现秒数（30 分钟）
+    tierV:
+      delay: 10
+      amount: 1
+      spawn-limit: 10
+      start: 2520          # V 级出现秒数（42 分钟）
+  emerald:
+    tierIV:
+      delay: 25
+      amount: 1
+      spawn-limit: 8
+      start: 2160          # 36 分钟
+    tierV:
+      delay: 20
+      amount: 1
+      spawn-limit: 10
+      start: 2880          # 48 分钟</code></pre>
+    <p>整体开关（<code>config.yml</code>）：</p>
+<pre><code>generator-tier-4-5-enabled: true   # false = 整体关闭 IV/V 级</code></pre>
+
+    <h3>5. 胜利用时显示（config.yml）</h3>
+<pre><code>win-time-display: true    # 胜利副标题显示"获得胜利, 用时"</code></pre>
+    <p>文案在语言文件 <code>GAME_END_WIN_TIME_SUBTITLE</code> 中自定义，占位符 <code>{team}</code>（队伍）、<code>{time}</code>（用时）。</p>
+
+    <h3>6. 重生时间减少开关（config.yml）</h3>
+<pre><code>respawn-time-reduction-enabled: true   # false = "重生时间减少"团队升级不再生效</code></pre>
+
+    <h3>7. 等级显示模式（config.yml）</h3>
+<pre><code>levels-display-mode: fancy   # fancy=彩色阶数/星级（默认）；simple=纯色简版</code></pre>
+
+    <h2>九、日常管理与运维</h2>
+    <table>
+      <thead><tr><th>操作</th><th>命令</th></tr></thead>
+      <tbody>
+        <tr><td>修改配置后生效</td><td><code>/bw reload</code></td></tr>
+        <tr><td>查看竞技场列表</td><td><code>/bw arenaList</code></td></tr>
+        <tr><td>启用 / 禁用竞技场</td><td><code>/bw enableArena &lt;名&gt;</code> / <code>/bw disableArena &lt;名&gt;</code></td></tr>
+        <tr><td>复制竞技场</td><td><code>/bw cloneArena &lt;源&gt; &lt;目标&gt;</code></td></tr>
+        <tr><td>竞技场分组（轮换 / 菜单）</td><td><code>/bw arenaGroup &lt;组名&gt; add|remove</code></td></tr>
+        <tr><td>强制开局</td><td><code>/bw start</code>（玩家可触发）或 <code>/bw forceStart</code></td></tr>
+        <tr><td>调试模式开局</td><td><code>/bw start debug</code>（倒计时缩短）</td></tr>
+        <tr><td>加快事件节奏</td><td><code>/bw time add &lt;秒&gt;</code></td></tr>
+        <tr><td>管理玩家等级</td><td><code>/bw level setLevel &lt;玩家&gt; &lt;等级&gt;</code>、<code>/bw level giveXp &lt;玩家&gt; &lt;经验&gt;</code></td></tr>
+        <tr><td>创建加入 NPC</td><td><code>/bw npc</code>（需 Citizens）</td></tr>
+      </tbody>
+    </table>
+    <p>独立命令：<code>/party</code>（组队）、<code>/shout</code>（全场喊话，默认 30 秒冷却）、<code>/rejoin</code>（断线重连）。</p>
+
+    <h2>十、常见问题</h2>
+    <p><strong>Q：启动报 "No license key configured"？</strong><br>
+    A：在 <code>config.yml</code> 的 <code>license-key</code> 填入有效授权密钥后<strong>重启</strong>服务端（<code>/bw reload</code> 无效）。</p>
+    <p><strong>Q：改了配置一定要重启吗？</strong><br>
+    A：一般不用，<code>/bw reload</code> 即可；但 <code>license-key</code>、<code>serverType</code>、<code>language</code> 等启动级选项需重启。</p>
+    <p><strong>Q：搭建命令全部提示无权限 / 未在会话中？</strong><br>
+    A：搭建命令必须在 <code>/bw setupArena &lt;名&gt;</code> 进入搭建会话后、在对应世界内使用；并确保你有 <code>bw.setup</code> 权限（或 OP）。</p>
+    <p><strong>Q：竞技场保存了但玩家进不去？</strong><br>
+    A：新保存的竞技场默认禁用，执行 <code>/bw enableArena &lt;名&gt;</code>；同时确认 <code>/bw setLobby</code> 已设置（非 BUNGEE 模式）。</p>
+    <p><strong>Q：事件加血没触发？</strong><br>
+    A：检查 <code>healthadd.yml</code> 的 <code>enabled</code> 是否为 <code>true</code>、events 时间与 <code>amount</code> 是否大于 0，改后 <code>/bw reload</code>；加血按<strong>游戏开始后</strong>计时，等待阶段不算。</p>
+    <p><strong>Q：快捷栏预设重进后丢失？</strong><br>
+    A：测试阶段功能的数据保存在内存中，属已知限制，重进后重新设置即可；不稳定可 <code>fastbuy.yml</code> 中 <code>enabled: false</code>。</p>
+    <p><strong>Q：怎么关闭限时 / 调整时长？</strong><br>
+    A：<code>config.yml</code> → <code>game-duration-limit</code>（分钟，<code>&lt;=0</code> 关闭）；配套调整 <code>generators.yml</code> IV/V 级 <code>start</code> 与床摧毁时间可获得合理的对局节奏。</p>
+    <p><strong>Q：1.20.5+ 服务端有什么要注意的？</strong><br>
+    A：物品标识改用 PersistentDataContainer（与旧版本物品 tag 不互通）；银鲛鱼 / 铁傀儡召唤物使用原版 AI，行为略有差异。其余无感知。</p>
+    <p><strong>Q：语言怎么只剩三种？</strong><br>
+    A：26.9 起仅保留 zh_cn / zh_tw / en，其余 11 种已移除；<code>language</code> 与 <code>/bw lang</code> 只能三选一。</p>
+    <p><strong>Q：Shift+点击购买一组扣多少钱？</strong><br>
+    A：按单价比例计价。例：羊毛 16 个 / 4 铁，Shift+点击买 64 个扣 16 铁。</p>
+    <p>更多问题见 <a href="#faq">常见问题 FAQ</a>。</p>
+
+    <div class="footer-nav">
+      <a href="#changelog">更新日志</a><a href="#home">Wiki 总览</a><a href="#readme">项目主页</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：配置文件详解 ======== -->
+  <section class="page" data-route="config">
+    <h1>配置文件详解</h1>
+    <p class="lede">插件首次启动后会在 <code>plugins/BedWarsHeypixel/</code> 下生成配置文件。修改后使用 <code>/bw reload</code> 热重载即可（无需重启服务端）。</p>
+
+    <p>26.9 版本配置变更概要：</p>
+    <ul>
+      <li><code>config.yml</code> 新增 6 组配置项（游戏时长限制、胜利用时、重生时间减少开关、4/5 级资源点开关、等级显示模式、隐身增强）。</li>
+      <li>新增 <code>healthadd.yml</code>（事件加血）与 <code>fastbuy.yml</code>（快捷栏预设，测试阶段）。</li>
+      <li><code>generators.yml</code> 新增钻石 / 绿宝石 IV/V 级配置节。</li>
+      <li><code>shopxp.yml</code> 移除自动生成的“下界合金剑”与“石中剑 EX”两项（下界合金套装保留）。</li>
+      <li>语言文件仅保留 <code>zh_cn</code> / <code>zh_tw</code> / <code>en</code>。</li>
+    </ul>
+
+    <h2>config.yml（主配置）</h2>
+
+    <h3>26.9 新增项</h3>
+<pre><code># 游戏总时长限制（单位：分钟）。游戏进行到该时限后强制结算。设为 &lt;=0 时关闭限制。
+game-duration-limit: 60
+
+# 胜利副标题是否显示"获得胜利, 用时"。消息可在语言文件 GAME_END_WIN_TIME_SUBTITLE 中自定义，
+# 支持 {team}（获胜队伍）与 {time}（用时）占位符。
+win-time-display: true
+
+# "重生时间减少"团队升级开关。设为 false 后该团队升级不再生效。
+respawn-time-reduction-enabled: true
+
+# 钻石/绿宝石 4 级（Tier IV）、5 级（Tier V）资源点总开关。设为 false 整体关闭。
+generator-tier-4-5-enabled: true
+
+# 等级显示模式：
+#   fancy  = 原有彩色阶数/星级显示
+#   simple = 纯色简版显示
+levels-display-mode: fancy
+
+# 隐身增强（喝隐身药水后的表现增强）
+invisibility-enhance:
+  # 总开关：开启后非队友完全看不到隐身玩家（含手持物品），
+  # 队友可见其头顶名字标签；隐身玩家未蹲下时持续向队友发送粒子效果（蹲下即隐藏粒子）。
+  enabled: true
+  # 向队友发送隐身粒子的间隔（单位：tick）
+  particle-interval: 4
+  # 每次发送的粒子数量
+  particle-amount: 3</code></pre>
+
+    <h3>其他常用项（节选）</h3>
+<pre><code>serverType: MULTIARENA   # MULTIARENA / SHARED / BUNGEE
+language: zh_cn          # 可选 zh_cn / zh_tw / en
+license-key: ""          # 授权密钥（必填，否则插件无法启用）
+debug: false             # 调试模式（开局倒计时缩短，配合 /bw time add 调试事件）</code></pre>
+
+    <h2>healthadd.yml（事件加血，26.9 新增）</h2>
+    <p>可配置游戏开始后 <strong>1~4 次</strong>全体加血事件；不需要时将 <code>enabled</code> 设为 <code>false</code> 或删除全部 <code>events</code> 条目即可关闭。</p>
+    <p>默认配置（2 次事件：开局后第 5 分钟、第 10 分钟，每次 +5 颗心）：</p>
+<pre><code>health-add:
+  # 总开关
+  enabled: true
+  # 默认加血量（单位：半心）。10 = 5 颗心。单个事件未写 amount 时使用该值。
+  default-amount: 10
+  # 事件列表：可配置 1~4 次；每个事件的触发时间与血量均可单独配置
+  events:
+    1:
+      time-minutes: 5    # 游戏开始后第 5 分钟
+      time-seconds: 0
+      amount: 10         # +5 颗心（10 半心）
+    2:
+      time-minutes: 10   # 游戏开始后第 10 分钟
+      time-seconds: 0
+      amount: 10</code></pre>
+    <p>说明：</p>
+    <ul>
+      <li><code>amount</code> 单位为<strong>半心</strong>，<code>amount: 6</code> 即 +3 颗心。</li>
+      <li>触发时会<strong>全竞技场广播</strong>提示并播放音效，消息可在语言文件中修改（默认简中文案：<code>&amp;a全体加血 &amp;7(+{hearts} 颗心)</code>）。</li>
+      <li>自动集成到<strong>计分板事件显示</strong>：当加血时间早于下一个事件链事件（如钻石 II 级、床摧毁等）时，事件行会显示加血事件倒计时。</li>
+      <li>时间与血量不合法（<code>&lt;=0</code>）的事件会被忽略；事件按触发时间先后排序执行。</li>
+    </ul>
+
+    <h2>fastbuy.yml（快捷栏预设，26.9 新增，测试阶段功能）</h2>
+    <p>快捷购买界面会出现<strong>红石图标</strong>（默认槽位 45），点击打开预设设置界面，为每个商店类别设置“购买后物品自动放入的快捷栏槽位（0-8）”。之后购买该类别物品时自动移位到指定槽位；若目标槽位已有物品则<strong>交换</strong>。</p>
+    <div class="callout callout-warn">
+      <p>⚠️ 测试阶段功能：预设数据按玩家保存在内存中，玩家重进服务器后需重新设置。若不稳定可将 <code>enabled</code> 设为 <code>false</code> 关闭。</p>
+    </div>
+<pre><code># 快捷栏预设（测试阶段功能）：购买后物品自动放入指定快捷栏槽位
+# 总开关
+enabled: true
+
+# 快捷购买界面中的入口图标
+icon:
+  slot: 45              # 图标所在槽位（0-53，默认 45）
+  material: REDSTONE    # 图标材质
+  data: 0               # 旧版材质数据值
+  name: "&amp;c快捷栏预设"
+  lore:
+    - "&amp;7为每个商店类别设置购买后"
+    - "&amp;7物品自动放入的快捷栏槽位"
+
+# 预设设置界面文本
+gui:
+  title: "&amp;8快捷栏预设设置"          # 主界面标题
+  pick-title: "&amp;8选择快捷栏槽位"     # 槽位选择界面标题
+  category-lore:                    # 类别物品的描述
+    - "&amp;7当前槽位: {slot}"
+    - ""
+    - "&amp;e点击设置"
+  none-text: "未设置"               # 类别未设置槽位时的显示文本
+  slot-item-name: "&amp;a快捷栏 {slot}" # 槽位选项名称（{slot} 为槽位号）
+  clear-name: "&amp;c清除该类别设置"     # 清除按钮名称
+  clear-material: BARRIER           # 清除按钮材质
+  back-name: "&amp;c返回"               # 返回按钮名称</code></pre>
+
+    <h2>generators.yml（资源生成器）</h2>
+    <p>26.9 在 <code>Default</code> 配置节下为钻石 / 绿宝石新增 <strong>Tier IV / Tier V</strong> 配置节（<code>start</code> 为该级别出现的秒数）：</p>
+<pre><code>Default:
+  diamond:
+    # ...原有 tierI~tierIII 配置...
+    tierIV:
+      delay: 12            # 生成间隔（秒）
+      amount: 1            # 每次生成数量
+      spawn-limit: 8       # 场上堆积上限
+      start: 1800          # IV 级出现时间（秒），默认 30 分钟
+    tierV:
+      delay: 10
+      amount: 1
+      spawn-limit: 10
+      start: 2520          # V 级出现时间（秒），默认 42 分钟
+  emerald:
+    # ...原有 tierI~tierIII 配置...
+    tierIV:
+      delay: 25
+      amount: 1
+      spawn-limit: 8
+      start: 2160          # 默认 36 分钟
+    tierV:
+      delay: 20
+      amount: 1
+      spawn-limit: 10
+      start: 2880          # 默认 48 分钟</code></pre>
+    <ul>
+      <li>以上默认值均可按需修改。</li>
+      <li>搭配 <code>config.yml</code> 中 <code>generator-tier-4-5-enabled: false</code> 可整体关闭 IV/V 级（无需逐项删除）。</li>
+      <li>IV/V 级事件同样显示在计分板事件行（语言项：钻石 IV 级 / 钻石 V 级 / 绿宝石 IV 级 / 绿宝石 V 级）。</li>
+    </ul>
+    <blockquote><p>提示：<code>config.yml</code> 默认 <code>game-duration-limit: 60</code>、床摧毁与末影龙事件默认 45 分钟（2700 秒），IV/V 级资源点默认时间正好分布在其间的对局节奏中，可结合自己的时长配置调整。</p></blockquote>
+
+    <h2>其他配置文件</h2>
+    <table>
+      <thead><tr><th>文件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>shop.yml</code></td><td>常规商店配置（含快捷购买默认槽位）</td></tr>
+        <tr><td><code>shopxp.yml</code></td><td>经验商店配置（26.9 移除了自动生成的“下界合金剑”与“石中剑 EX”两项，下界合金套装保留）</td></tr>
+        <tr><td><code>upgrades2.yml</code> / <code>upgrades3.yml</code></td><td>队伍升级配置（含“重生时间减少”，受 <code>respawn-time-reduction-enabled</code> 开关控制）</td></tr>
+        <tr><td><code>signs.yml</code></td><td>加入游戏牌子配置</td></tr>
+        <tr><td><code>levels.yml</code></td><td>等级经验配置</td></tr>
+        <tr><td>语言文件夹</td><td>仅 <code>zh_cn</code> / <code>zh_tw</code> / <code>en</code> 三种语言（26.9 起移除其余 11 种）</td></tr>
+      </tbody>
+    </table>
+
+    <h3>相关语言消息（26.9）</h3>
+    <table>
+      <thead><tr><th>语言键</th><th>默认值（zh_cn）</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>GAME_END_WIN_TIME_SUBTITLE</code></td><td><code>&amp;a&amp;l{team} &amp;7获得胜利, 用时 &amp;f{time}</code></td><td>胜利副标题，受 <code>win-time-display</code> 控制</td></tr>
+        <tr><td><code>GAME_EVENT_HEALTH_ADD_CHAT</code></td><td><code>&amp;a全体加血 &amp;7(+{hearts} 颗心)</code></td><td>加血事件聊天广播</td></tr>
+        <tr><td><code>GAME_EVENT_HEALTH_ADD_NAME</code></td><td><code>&amp;a全体加血</code></td><td>加血事件计分板名称</td></tr>
+        <tr><td><code>NEXT_EVENT_DIAMOND_UPGRADE_IV</code> / <code>_V</code></td><td><code>&amp;f钻石IV级</code> / <code>&amp;f钻石V级</code></td><td>计分板事件行名称</td></tr>
+        <tr><td><code>NEXT_EVENT_EMERALD_UPGRADE_IV</code> / <code>_V</code></td><td><code>&amp;f绿宝石IV级</code> / <code>&amp;f绿宝石V级</code></td><td>计分板事件行名称</td></tr>
+      </tbody>
+    </table>
+
+    <div class="footer-nav">
+      <a href="#features">功能说明</a><a href="#commands">指令与权限</a><a href="#faq">常见问题</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：指令与权限 ======== -->
+  <section class="page" data-route="commands">
+    <h1>指令与权限</h1>
+    <p class="lede">主命令为 <code>/bw</code>，别名 <code>/bedwars</code>、<code>/bedwars1058</code>。无参数执行 <code>/bw</code> 时：管理员会看到管理子命令列表，普通玩家会看到可用命令列表（等同 <code>/bw cmds</code>）。</p>
+    <blockquote><p>以下子命令与代码中注册的命令一致（<code>MainCommand.java</code>）。标注 <em>（仅非 BUNGEE 模式）</em> 的命令在 <code>serverType: BUNGEE</code> 下不注册。</p></blockquote>
+
+    <h2>玩家命令</h2>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>/bw cmds</code></td><td>查看所有可用命令</td></tr>
+        <tr><td><code>/bw join &lt;地图/组名/random&gt;</code></td><td>加入指定地图、地图组或随机加入</td></tr>
+        <tr><td><code>/bw leave</code></td><td>离开当前游戏</td></tr>
+        <tr><td><code>/bw gui &lt;组名&gt;</code></td><td>打开竞技场选择 GUI <em>（仅非 BUNGEE 模式）</em></td></tr>
+        <tr><td><code>/bw lang</code></td><td>切换个人语言（26.9 起仅 zh_cn / zh_tw / en）</td></tr>
+        <tr><td><code>/bw stats</code></td><td>查看个人战绩</td></tr>
+        <tr><td><code>/bw teleporter</code></td><td>打开观战传送菜单（观战者使用）</td></tr>
+        <tr><td><code>/bw tp &lt;玩家&gt;</code></td><td>传送到指定玩家（管理员 / 观战传送）</td></tr>
+        <tr><td><code>/bw upgradesmenu</code></td><td>打开队伍升级菜单（调试 / 管理用途）</td></tr>
+      </tbody>
+    </table>
+
+    <h2>管理 / 敏感命令（需对应权限）</h2>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th><th>权限</th></tr></thead>
+      <tbody>
+        <tr><td><code>/bw setLobby</code></td><td>设置主大厅出生点 <em>（仅非 BUNGEE 模式）</em></td><td><code>bw.setup</code></td></tr>
+        <tr><td><code>/bw start</code> / <code>/bw forceStart</code></td><td>强制开始游戏（带 <code>debug</code> 参数可进入调试模式并缩短开局倒计时）</td><td><code>bw.forcestart</code></td></tr>
+        <tr><td><code>/bw time add &lt;秒&gt;</code></td><td>为当前游戏增加时间（详见下方说明）</td><td><code>bw.*</code></td></tr>
+        <tr><td><code>/bw level setLevel &lt;玩家&gt; &lt;等级&gt;</code></td><td>设置玩家等级</td><td><code>bw.level</code></td></tr>
+        <tr><td><code>/bw level giveXp &lt;玩家&gt; &lt;经验&gt;</code></td><td>给玩家添加经验</td><td><code>bw.level</code></td></tr>
+        <tr><td><code>/bw reload</code></td><td>热重载全部配置文件</td><td><code>bw.reload</code></td></tr>
+        <tr><td><code>/bw setupArena &lt;名称&gt;</code></td><td>进入竞技场搭建模式</td><td><code>bw.setup</code></td></tr>
+        <tr><td><code>/bw arenaList</code></td><td>查看所有竞技场列表</td><td><code>bw.setup</code></td></tr>
+        <tr><td><code>/bw delArena &lt;名称&gt;</code></td><td>删除竞技场</td><td><code>bw.delete</code></td></tr>
+        <tr><td><code>/bw enableArena &lt;名称&gt;</code></td><td>启用竞技场</td><td><code>bw.enableRotation</code></td></tr>
+        <tr><td><code>/bw disableArena &lt;名称&gt;</code></td><td>禁用竞技场</td><td><code>bw.disable</code></td></tr>
+        <tr><td><code>/bw cloneArena &lt;源&gt; &lt;目标&gt;</code></td><td>复制竞技场</td><td><code>bw.clone</code></td></tr>
+        <tr><td><code>/bw arenaGroup &lt;组名&gt; [add/remove]</code></td><td>管理竞技场分组</td><td><code>bw.groups</code></td></tr>
+        <tr><td><code>/bw build</code></td><td>切换建造模式（脱离游戏保护范围）</td><td><code>bw.build</code></td></tr>
+        <tr><td><code>/bw npc</code></td><td>创建加入游戏 NPC <em>（需安装 Citizens，仅非 BUNGEE 模式）</em></td><td><code>bw.npc</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>/bw time add 说明（26.9 修复后行为）</h3>
+    <ul>
+      <li>为当前游戏事件倒计时增加指定秒数，常用于 debug 调试时快速推进事件。</li>
+      <li>26.9 修复：此前 debug 模式下 <code>/bw time add</code> 可能导致事件系统卡死、游戏永不结束。现在计数归零会<strong>立即推进事件</strong>，倒计时钳制最小 1 秒。</li>
+      <li><strong>每次最多推进到下一个事件</strong>，防止单次加时过多跳过床摧毁等阶段；需要继续推进可重复输入。</li>
+      <li>单次加时不超过当前阶段剩余时间。</li>
+    </ul>
+
+    <h2>竞技场搭建命令</h2>
+    <p>进入 <code>/bw setupArena &lt;名称&gt;</code> 搭建会话后，在对应世界内使用（均需 <code>bw.setup</code> 权限）：</p>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>/bw autoCreateTeams &lt;数量&gt;</code></td><td>自动创建指定数量的队伍</td></tr>
+        <tr><td><code>/bw createTeam &lt;颜色&gt;</code> / <code>/bw removeTeam &lt;颜色&gt;</code></td><td>创建 / 移除队伍</td></tr>
+        <tr><td><code>/bw setSpawn &lt;颜色&gt;</code></td><td>设置队伍出生点</td></tr>
+        <tr><td><code>/bw setBed &lt;颜色&gt;</code></td><td>设置队伍床的位置</td></tr>
+        <tr><td><code>/bw setShop &lt;队伍颜色&gt;</code></td><td>设置队伍商店位置</td></tr>
+        <tr><td><code>/bw setUpgrade &lt;队伍颜色&gt;</code></td><td>设置队伍升级 NPC 位置</td></tr>
+        <tr><td><code>/bw setWaitingSpawn</code></td><td>设置等待大厅出生点</td></tr>
+        <tr><td><code>/bw waitingPos</code></td><td>设置等待大厅位置</td></tr>
+        <tr><td><code>/bw setSpectSpawn</code></td><td>设置观战出生点</td></tr>
+        <tr><td><code>/bw setMaxInTeam &lt;数量&gt;</code></td><td>设置队伍最大人数</td></tr>
+        <tr><td><code>/bw setMaxBuildHeight &lt;高度&gt;</code></td><td>设置最大建造高度</td></tr>
+        <tr><td><code>/bw addGenerator &lt;类型&gt;</code> / <code>/bw removeGenerator &lt;类型&gt;</code></td><td>添加 / 移除资源生成器</td></tr>
+        <tr><td><code>/bw setType &lt;类型&gt;</code></td><td>设置竞技场类型（如 Solo/4v4 等队伍规模）</td></tr>
+        <tr><td><code>/bw gameMode &lt;模式&gt;</code></td><td>设置游戏模式</td></tr>
+        <tr><td><code>/bw setKillDrops</code></td><td>设置击杀掉落物位置</td></tr>
+        <tr><td><code>/bw save</code></td><td>保存竞技场并退出搭建会话</td></tr>
+      </tbody>
+    </table>
+
+    <h2>独立命令</h2>
+    <p>以下命令独立于 <code>/bw</code> 注册（插件自带，部分可在 <code>config.yml</code> 中开关）：</p>
+    <table>
+      <thead><tr><th>命令</th><th>说明</th><th>相关权限</th></tr></thead>
+      <tbody>
+        <tr><td><code>/party</code></td><td>组队系统命令（创建 / 邀请 / 踢出队伍等）</td><td>—</td></tr>
+        <tr><td><code>/shout</code></td><td>将聊天消息发送到全竞技场（有冷却，默认 30 秒）</td><td><code>bw.shout</code></td></tr>
+        <tr><td><code>/rejoin</code></td><td>断线后重新加入仍在进行的游戏</td><td><code>bw.rejoin</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2>权限列表</h2>
+    <table>
+      <thead><tr><th>权限</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>bw.*</code></td><td>所有权限</td></tr>
+        <tr><td><code>bw.setup</code></td><td>搭建 / 管理竞技场</td></tr>
+        <tr><td><code>bw.reload</code></td><td>重载配置</td></tr>
+        <tr><td><code>bw.forcestart</code></td><td>强制开始游戏</td></tr>
+        <tr><td><code>bw.build</code></td><td>游戏内建造权限</td></tr>
+        <tr><td><code>bw.delete</code></td><td>删除竞技场</td></tr>
+        <tr><td><code>bw.clone</code></td><td>复制竞技场</td></tr>
+        <tr><td><code>bw.enableRotation</code> / <code>bw.disable</code></td><td>启用 / 禁用竞技场</td></tr>
+        <tr><td><code>bw.groups</code></td><td>管理竞技场分组</td></tr>
+        <tr><td><code>bw.npc</code></td><td>创建加入 NPC</td></tr>
+        <tr><td><code>bw.level</code></td><td>管理玩家等级经验</td></tr>
+        <tr><td><code>bw.rejoin</code></td><td>断线重连权限</td></tr>
+        <tr><td><code>bw.shout</code></td><td>全服喊话</td></tr>
+        <tr><td><code>bw.vip</code></td><td>加入满员游戏（将非 VIP 玩家踢出）</td></tr>
+        <tr><td><code>bw.chatcolor</code></td><td>聊天颜色权限</td></tr>
+        <tr><td><code>bw.cmd.bypass</code></td><td>命令绕过权限</td></tr>
+      </tbody>
+    </table>
+
+    <div class="footer-nav">
+      <a href="#config">配置文件详解</a><a href="#features">功能说明</a><a href="#faq">常见问题</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：功能说明 ======== -->
+  <section class="page" data-route="features">
+    <h1>功能说明</h1>
+    <p class="lede">本页介绍 BedWarsHeypixel 的特色功能，重点覆盖 <strong>26.9 版本新增 / 变更</strong>内容。配置项细节见 <a href="#config">配置文件详解</a>。</p>
+
+    <h2>26.9 新增功能</h2>
+
+    <h3>快捷栏预设（测试阶段功能）</h3>
+    <ul>
+      <li><strong>开启方式</strong>：<code>fastbuy.yml</code> → <code>enabled: true</code>（默认开启）。</li>
+      <li><strong>入口</strong>：打开快捷购买界面，点击<strong>红石图标</strong>（默认槽位 45，<code>icon.slot</code> 可改）进入预设设置界面。</li>
+      <li><strong>玩法</strong>：为每个商店类别设置“购买后物品自动放入的快捷栏槽位（0-8）”。之后购买该类别物品时，物品自动移位到指定快捷栏槽位；若目标槽位已有物品，则两者<strong>交换</strong>。</li>
+      <li><strong>用途</strong>：羊毛 / 石头等常用物资买来后自动落到位，省去手动整理快捷栏的时间。</li>
+      <li><strong>注意</strong>：
+        <ul>
+          <li>测试阶段功能，预设数据按玩家保存在内存中，<strong>重进服务器后需重新设置</strong>。</li>
+          <li>界面全部文本与图标（标题、清除按钮、返回按钮等）均可在 <code>fastbuy.yml</code> 自定义。</li>
+          <li>若出现不稳定情况，可将 <code>enabled</code> 设为 <code>false</code> 关闭。</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>事件加血（healthadd.yml）</h3>
+    <ul>
+      <li><strong>作用</strong>：游戏开始后按配置时间对场上<strong>所有存活玩家</strong>触发全体加血，为后期对局续命、避免被一两波消耗打崩。</li>
+      <li><strong>默认</strong>：2 次事件（开局后第 5 分钟、第 10 分钟），每次 +5 颗心（<code>amount=10</code> 半心）。</li>
+      <li><strong>可配</strong>：1~4 次事件；每次的 <code>time-minutes</code> / <code>time-seconds</code> 与 <code>amount</code> 均可单独设置；<code>enabled: false</code> 或清空 events 即关闭。</li>
+      <li><strong>计分板集成</strong>：当加血时间早于下一个事件链事件（钻石 / 绿宝石升级、床摧毁等）时，计分板事件行显示加血事件倒计时，例如“全体加血 03:24”。</li>
+      <li><strong>触发表现</strong>：全竞技场广播 <code>&amp;a全体加血 &amp;7(+{hearts} 颗心)</code> 并播放音效（消息可在语言文件修改）。</li>
+    </ul>
+
+    <h3>游戏总时长限制</h3>
+    <ul>
+      <li><code>config.yml</code> → <code>game-duration-limit: 60</code>（单位仅分钟）。</li>
+      <li>游戏进行到时限后<strong>强制结算</strong>（结算流程与正常分出胜负一致）。</li>
+      <li>设为 <code>&lt;=0</code> 关闭限制。</li>
+      <li>适用场景：防止双方龟缩不出导致一局挂机数小时；默认 60 分钟与床摧毁（45 分钟）+ 游戏结束（15 分钟）的事件链总长一致。</li>
+    </ul>
+
+    <h3>隐身增强</h3>
+    <ul>
+      <li><code>config.yml</code> → <code>invisibility-enhance.enabled: true</code>（默认开启）。</li>
+      <li>喝下隐身药水后：
+        <ul>
+          <li><strong>非队友完全看不到该玩家</strong>，包括其手持物品（原版隐身手持物品会暴露）。</li>
+          <li><strong>队友</strong>可以看到其头顶名字标签，方便队内识别。</li>
+          <li>隐身玩家<strong>未蹲下时</strong>持续向队友发送粒子效果，<strong>蹲下即隐藏粒子</strong>——蹲下反而不暴露，比原版疾跑粒子更实用（原版疾跑时才喷粒子，本功能反其道而行）。</li>
+        </ul>
+      </li>
+      <li>粒子参数：<code>particle-interval: 4</code>（发送间隔 tick）、<code>particle-amount: 3</code>（每次数量）。</li>
+      <li>性能优化：隐身粒子<strong>仅发送给队友</strong>；隐身玩家名牌在 Tab 列表按队伍区分显示（BwTabList）。</li>
+    </ul>
+
+    <h3>重生时间减少增益开关</h3>
+    <ul>
+      <li><code>config.yml</code> → <code>respawn-time-reduction-enabled: true</code>（默认开启）。</li>
+      <li>设为 <code>false</code> 后，队伍升级中的“重生时间减少”不再生效（购买项仍显示与否取决于 <code>upgrades2.yml</code> / <code>upgrades3.yml</code> 的配置，但效果关闭）。</li>
+      <li>适用场景：不希望后期团灭方过快反扑的服务器可关闭。</li>
+    </ul>
+
+    <h3>4/5 级资源点（钻石 / 绿宝石 Tier IV/V）</h3>
+    <ul>
+      <li><code>generators.yml</code> 内置默认值：钻石 IV 级 1800 秒（30 分钟）、V 级 2520 秒（42 分钟）；绿宝石 IV 级 2160 秒（36 分钟）、V 级 2880 秒（48 分钟）。</li>
+      <li>IV/V 级事件显示在计分板事件行（“钻石 IV 级”等）。</li>
+      <li><code>config.yml</code> → <code>generator-tier-4-5-enabled: false</code> 可整体关闭 IV/V 级。</li>
+      <li>所有 delay / amount / spawn-limit / start 均可修改，详见 <a href="#config">配置文件详解</a>。</li>
+    </ul>
+
+    <h3>胜利用时显示</h3>
+    <ul>
+      <li><code>config.yml</code> → <code>win-time-display: true</code>（默认开启）。</li>
+      <li>胜利副标题显示“获得胜利, 用时”。</li>
+      <li>自定义消息：语言文件 <code>GAME_END_WIN_TIME_SUBTITLE</code>，占位符 <code>{team}</code>（获胜队伍）、<code>{time}</code>（用时）。简中默认：<code>&amp;a&amp;l{team} &amp;7获得胜利, 用时 &amp;f{time}</code>。</li>
+    </ul>
+
+    <h3>等级显示模式</h3>
+    <ul>
+      <li><code>config.yml</code> → <code>levels-display-mode</code>：
+        <ul>
+          <li><code>fancy</code>（默认）：原有彩色阶数 / 星级显示。</li>
+          <li><code>simple</code>：纯色简版显示，适合搭配自定义聊天格式或低版本客户端。</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>语言精简</h3>
+    <ul>
+      <li>语言系统仅保留<strong>简体中文（zh_cn）</strong>、<strong>繁体中文（zh_tw，26.9 新增）</strong>、<strong>英文（en）</strong>，移除其余 11 种语言。</li>
+      <li><code>config.yml</code> 的 <code>language</code> 与 <code>/bw lang</code> 均只能在这三种中选择。</li>
+    </ul>
+
+    <h2>26.9 修复与优化</h2>
+    <table>
+      <thead><tr><th>类型</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td>修复</td><td>Shift+点击购买一组只扣 1 份资源 → 现按比例计价（例：羊毛 16 个 / 4 铁，Shift+点击买 64 个扣 16 铁）</td></tr>
+        <tr><td>修复</td><td>debug 模式 <code>/bw time add</code> 后事件系统卡死、游戏永不结束 → 计数归零立即推进事件、倒计时钳制最小 1 秒、单次加时不超当前阶段剩余时间、重复输入可继续推进</td></tr>
+        <tr><td>修复</td><td>ChunkLoad 监听器异步线程调用实体 API → 改回主线程执行</td></tr>
+        <tr><td>优化</td><td>版本适配层重构：新增 versionsupport_v1_21_R1/R2/R3；1.20.5+ 适配器不依赖带版本号的 CraftBukkit 包名（公开 Bukkit API + 运行时反射，PersistentDataContainer 标识物品）</td></tr>
+        <tr><td>优化</td><td>隐身玩家名牌按队伍区分显示（BwTabList）</td></tr>
+        <tr><td>优化</td><td>隐身粒子仅发送给队友，降低网络 / 客户端开销</td></tr>
+        <tr><td>优化</td><td><code>/bw time add</code> 每次最多推进到下一个事件，防止误操作跳过床摧毁阶段</td></tr>
+      </tbody>
+    </table>
+
+    <h2>既有特色功能（早于 26.9）</h2>
+
+    <h3>经验模式</h3>
+    <ul>
+      <li>开启后游戏内拾取的铁锭 / 金锭 / 钻石 / 绿宝石按<strong>经验转换配置</strong>比例自动转为经验。</li>
+      <li>玩家可在<strong>经验商店</strong>（<code>shopxp.yml</code>）用经验购买物品；队伍升级含<strong>经验队伍增益</strong>；击杀、胜利等奖励在 <code>levels.yml</code> 调整。</li>
+    </ul>
+
+    <h3>新道具</h3>
+    <ul>
+      <li><strong>救援平台</strong>：悬空时使用，脚下生成 5×5 镂空十字粘液块平台，抵消跌落伤害，持续 15 秒后消失，不可被破坏。</li>
+      <li><strong>回城卷轴</strong>：使用后 5 秒回城倒计时（伴粒子特效），移动或丢弃物品会取消，结束传送回队伍出生点。</li>
+      <li><strong>防御墙</strong>：面前生成 3×5 砂岩墙体，支持斜向放置；前方被遮挡时自动回退到身后生成。</li>
+      <li><strong>隐身药水</strong>：配合 26.9 隐身增强使用体验更佳（见上）。</li>
+    </ul>
+
+    <h3>其他</h3>
+    <ul>
+      <li>烈焰弹配置修改（按模组源码还原爆炸半径与击退手感）。</li>
+      <li>取消资源生成速率限制、取消挂机惩罚机制。</li>
+      <li>计分板队伍状态显示（有床 / 团灭）、等级阶数 / 星级显示。</li>
+      <li>Q 键添加 / 去除快捷购买、Shift+点击购买一组（26.9 起按比例计价）。</li>
+    </ul>
+
+    <div class="footer-nav">
+      <a href="#config">配置文件详解</a><a href="#compat">版本兼容性</a><a href="#faq">常见问题</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：版本兼容性 ======== -->
+  <section class="page" data-route="compat">
+    <h1>版本兼容性</h1>
+
+    <h2>支持的服务端版本</h2>
+    <table>
+      <thead><tr><th>项目</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>支持范围</td><td>Minecraft <strong>1.8.8 ~ 1.21.4</strong></td></tr>
+        <tr><td>服务端核心</td><td>Spigot / Paper 及其兼容核心（如 Purpur 等）</td></tr>
+        <tr><td>运行环境</td><td>Java 11 或更高版本（1.20.5+ 服务端按其自身要求使用更高版本 Java）</td></tr>
+        <tr><td>自行编译</td><td>需要 <strong>JDK 21</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>26.9 新增支持的版本</h3>
+    <ul>
+      <li>Minecraft <strong>1.20.5</strong></li>
+      <li>Minecraft <strong>1.20.6</strong></li>
+      <li>Minecraft <strong>1.21</strong></li>
+      <li>Minecraft <strong>1.21.1</strong></li>
+      <li>Minecraft <strong>1.21.2</strong></li>
+      <li>Minecraft <strong>1.21.3</strong></li>
+      <li>Minecraft <strong>1.21.4</strong></li>
+    </ul>
+    <p>（26.9 之前最高支持到 1.20.4。）</p>
+
+    <hr>
+
+    <h2>1.20.5+ 注意事项</h2>
+    <p>1.20.5+ 通过<strong>新版本适配器</strong>支持（<code>versionsupport_v1_21_R1/R2/R3</code> 等模块，26.9 版本适配层重构成果）：</p>
+    <ul>
+      <li>新适配器不再依赖带版本号的 CraftBukkit 包名，改用<strong>公开 Bukkit API + 运行时反射</strong>实现，对未来小版本的兼容性更好。</li>
+      <li><strong>物品标识变更</strong>：1.20.5+ 上物品标识改用 <strong>PersistentDataContainer</strong>，与旧版本（1.20.4 及以下）的物品 tag <strong>不互通</strong>。
+        <ul>
+          <li>影响：跨版本复用旧数据（如涉及插件标记物品的存档 / 数据）时注意；同版本内正常游玩不受影响。</li>
+        </ul>
+      </li>
+      <li><strong>召唤物行为差异</strong>：银鲛鱼 / 铁傀儡召唤物在 1.20.5+ 使用<strong>原版 AI</strong>，行为与旧版本略有差异。</li>
+    </ul>
+
+    <hr>
+
+    <h2>版本选择建议</h2>
+    <table>
+      <thead><tr><th>场景</th><th>建议</th></tr></thead>
+      <tbody>
+        <tr><td>追求最新版本</td><td>1.21.4（26.9 已完整支持）</td></tr>
+        <tr><td>1.20.x 稳定服</td><td>1.20.4 及以下走旧适配器，1.20.5 / 1.20.6 走新适配器，均可</td></tr>
+        <tr><td>老版本兼容</td><td>最低支持 1.8.8（注意旧版本客户端无法看到新版本专属内容的表现差异）</td></tr>
+        <tr><td>跨版本混合客户端</td><td>服务端核心需使用 ViaVersion 等跨版本方案，插件本身按服务端版本选择适配器</td></tr>
+      </tbody>
+    </table>
+    <blockquote><p>提示：插件按服务端自身版本自动选择对应的 versionsupport 适配模块，无需手动配置。</p></blockquote>
+
+    <hr>
+
+    <h2>构建环境</h2>
+    <ul>
+      <li>自行编译插件 jar 需要 <strong>JDK 21</strong>。</li>
+      <li>运行服务器本身按其对应要求选择 Java 版本即可（例如 1.20.5+ 的 Paper 通常要求 Java 21；1.8.8 老核心则使用 Java 8）。</li>
+    </ul>
+
+    <div class="footer-nav">
+      <a href="#features">功能说明</a><a href="#config">配置文件详解</a><a href="#faq">常见问题</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：常见问题 FAQ ======== -->
+  <section class="page" data-route="faq">
+    <h1>常见问题 FAQ</h1>
+    <p class="lede">新手服主请先阅读 <a href="#use">详细使用教程</a>。本页收录安装后与日常运维中最常见的问题。</p>
+
+    <h2>授权与启动</h2>
+    <p><strong>Q：插件启动时报错 "No license key configured"？</strong><br>
+    A：本插件为付费授权插件。请在 <code>plugins/BedWarsHeypixel/config.yml</code> 的 <code>license-key</code> 中填写有效的授权密钥，并重启服务端。密钥为空、无效或校验失败时插件会输出错误日志并自动禁用。</p>
+
+    <p><strong>Q：授权验证失败怎么办？</strong><br>
+    A：检查密钥是否复制完整（无多余空格 / 换行）、网络是否可访问验证服务器；确认密钥与当前服务器匹配。修改后重启服务端（授权验证发生在插件启用阶段，<code>/bw reload</code> 不能代替）。</p>
+
+    <p><strong>Q：插件没有生成配置文件？</strong><br>
+    A：确认插件 jar 已放入 <code>plugins</code> 文件夹且服务端启动成功；授权验证通过前插件可能不会生成完整配置。先解决授权问题再重启。</p>
+
+    <h2>配置与重载</h2>
+    <p><strong>Q：修改了配置需要重启服务端吗？</strong><br>
+    A：不需要，使用 <code>/bw reload</code> 即可热重载全部配置文件（含 26.9 新增的 <code>healthadd.yml</code>、<code>fastbuy.yml</code>）。但 <code>license-key</code>、<code>serverType</code> 等启动级选项修改后需要重启。</p>
+
+    <p><strong>Q：26.9 升级后我的旧 config.yml 会怎样？</strong><br>
+    A：首次以 26.9 启动时会自动补全新增配置项（<code>game-duration-limit</code>、<code>win-time-display</code>、<code>respawn-time-reduction-enabled</code>、<code>generator-tier-4-5-enabled</code>、<code>levels-display-mode</code>、<code>invisibility-enhance.*</code>），并自动生成 <code>healthadd.yml</code> 与 <code>fastbuy.yml</code>。已有自定义值不会被覆盖。</p>
+
+    <p><strong>Q：<code>generators.yml</code> 里没有 tierIV/tierV 配置节？</strong><br>
+    A：26.9 起首次启动会自动写入默认值（钻石 IV 1800 秒 / V 2520 秒；绿宝石 IV 2160 秒 / V 2880 秒）。若文件为更早版本生成，可按 <a href="#config">配置文件详解</a> 中的示例手动补写，或删除该文件重新生成（注意先备份自定义内容）。</p>
+
+    <h2>版本兼容</h2>
+    <p><strong>Q：支持哪些 Minecraft 版本？</strong><br>
+    A：1.8.8 ~ 1.21.4。26.9 新增 1.20.5 / 1.20.6 / 1.21 / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 的支持。</p>
+
+    <p><strong>Q：从 1.20.4 升级到 1.20.5+ 后要注意什么？</strong><br>
+    A：① 物品标识改用 PersistentDataContainer，与旧版本物品 tag 不互通；② 银鲛鱼 / 铁傀儡召唤物改用原版 AI，行为略有差异。详见 <a href="#compat">版本兼容性</a>。</p>
+
+    <p><strong>Q：编译插件需要什么 JDK？</strong><br>
+    A：构建需要 JDK 21；运行服务器本身按其对应核心的要求选择 Java 版本即可。</p>
+
+    <h2>竞技场搭建</h2>
+    <p><strong>Q：如何快速搭建一个竞技场？</strong><br>
+    A：依次执行 <code>/bw setLobby</code> → <code>/bw setupArena &lt;名称&gt;</code> → <code>/bw autoCreateTeams &lt;数量&gt;</code> → 在世界中按搭建命令设置出生点、床、商店、升级 NPC、资源生成器等 → <code>/bw save</code> → <code>/bw enableArena &lt;名称&gt;</code>。完整分步教程见 <a href="#use">详细使用教程</a>。</p>
+
+    <p><strong>Q：执行搭建命令提示未在搭建会话中？</strong><br>
+    A：搭建命令必须在 <code>/bw setupArena &lt;名称&gt;</code> 进入的搭建世界内使用，不能在大厅或其他世界执行。</p>
+
+    <p><strong>Q：<code>/bw save</code> 后竞技场没出现在列表里？</strong><br>
+    A：用 <code>/bw arenaList</code> 检查是否保存成功；新保存的竞技场默认禁用，需 <code>/bw enableArena &lt;名称&gt;</code> 启用后才会开放加入。</p>
+
+    <p><strong>Q：设置主大厅时报错？</strong><br>
+    A：<code>/bw setLobby</code> 需要在主大厅世界内（非竞技场世界）执行；BUNGEE 模式下无需设置。</p>
+
+    <h2>26.9 新功能</h2>
+    <p><strong>Q：事件加血为什么不触发？</strong><br>
+    A：检查 <code>healthadd.yml</code>：① <code>health-add.enabled</code> 是否为 <code>true</code>；② <code>events</code> 下是否配置了合法事件（时间为 0 或血量 <code>amount &lt;= 0</code> 的事件会被忽略）；③ 修改后是否执行了 <code>/bw reload</code>。加血事件在游戏开始后计时，等待大厅内不会触发。</p>
+
+    <p><strong>Q：如何关闭事件加血？</strong><br>
+    A：将 <code>healthadd.yml</code> 中 <code>health-add.enabled</code> 设为 <code>false</code>，然后 <code>/bw reload</code>。</p>
+
+    <p><strong>Q：快捷栏预设的红石图标不显示 / 想换个位置？</strong><br>
+    A：确认 <code>fastbuy.yml</code> 中 <code>enabled: true</code>；图标位置由 <code>icon.slot</code> 控制（默认 45），修改后 <code>/bw reload</code>。图标材质可通过 <code>icon.material</code> 更换。</p>
+
+    <p><strong>Q：快捷栏预设重进服务器后设置丢了？</strong><br>
+    A：这是已知限制——该功能为测试阶段，预设数据按玩家保存在内存中，重进服务器后需重新设置。后续版本会改善。</p>
+
+    <p><strong>Q：游戏到 60 分钟还没分出胜负怎么办？</strong><br>
+    A：26.9 起默认 <code>game-duration-limit: 60</code>，到时自动强制结算。若你希望更长 / 更短，修改 <code>config.yml</code> 中该值（单位分钟）；设为 <code>&lt;=0</code> 则关闭限时。</p>
+
+    <p><strong>Q：如何关闭“重生时间减少”团队升级？</strong><br>
+    A：<code>config.yml</code> 中 <code>respawn-time-reduction-enabled: false</code>，然后 <code>/bw reload</code>。</p>
+
+    <p><strong>Q：如何关闭 4/5 级钻石绿宝石资源点？</strong><br>
+    A：<code>config.yml</code> 中 <code>generator-tier-4-5-enabled: false</code>（整体关闭），或在 <code>generators.yml</code> 中调整 IV/V 级的 <code>start</code> 时间。</p>
+
+    <p><strong>Q：胜利后副标题想改文案？</strong><br>
+    A：语言文件中修改 <code>GAME_END_WIN_TIME_SUBTITLE</code>，占位符 <code>{team}</code> 为获胜队伍、<code>{time}</code> 为用时；想彻底关闭显示可将 <code>config.yml</code> 的 <code>win-time-display</code> 设为 <code>false</code>。</p>
+
+    <p><strong>Q：等级显示太花哨，想要简洁版？</strong><br>
+    A：<code>config.yml</code> 中 <code>levels-display-mode: simple</code>（默认 <code>fancy</code> 彩色阶数 / 星级）。</p>
+
+    <p><strong>Q：Shift+点击购买一组的扣费怎么算？</strong><br>
+    A：26.9 起按比例计价：商品单价 × 购买数量。例如羊毛 16 个卖 4 铁，Shift+点击买 64 个扣 16 铁。</p>
+
+    <p><strong>Q：语言只有三种了吗？</strong><br>
+    A：26.9 起语言系统仅保留简体中文（zh_cn）、繁体中文（zh_tw，新增）、英文（en），其余 11 种已移除。</p>
+
+    <h2>商店与经济</h2>
+    <p><strong>Q：怎么编辑商店内容？</strong><br>
+    A：编辑 <code>plugins/BedWarsHeypixel/shop.yml</code>（常规商店）或 <code>shopxp.yml</code>（经验商店）后 <code>/bw reload</code>。可按类别 / 等级（tier）结构添加商品，支持设置价格、货币类型、显示物品、快捷购买默认槽位等。编辑方法详见 <a href="#use">详细使用教程</a>。</p>
+
+    <p><strong>Q：Q 键快捷购买怎么用？</strong><br>
+    A：商店界面中手持物品按 Q 键即可添加 / 移除快捷购买；Shift+点击为购买一组（按比例计价）。</p>
+
+    <div class="footer-nav">
+      <a href="#home">Wiki 总览</a><a href="#config">配置文件详解</a><a href="#commands">指令与权限</a><a href="#features">功能说明</a><a href="#compat">版本兼容性</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：更新日志 26.9 ======== -->
+  <section class="page" data-route="changelog">
+    <h1>更新日志 — 26.9</h1>
+    <p class="lede">本版本重点：<strong>新版本适配（最高 1.21.4）</strong>、<strong>快捷栏预设（测试阶段）</strong>、<strong>事件加血</strong>、<strong>隐身增强</strong>，以及多项商店与事件系统修复。</p>
+
+    <h2>新增功能</h2>
+
+    <h3>1. 快捷栏预设（测试阶段功能，fastbuy.yml）</h3>
+    <ul>
+      <li>快捷购买界面新增<strong>红石图标</strong>（默认槽位 45，可通过 <code>icon.slot</code> 修改），点击打开<strong>预设设置界面</strong>。</li>
+      <li>可为每个商店类别设置“购买后物品自动放入的快捷栏槽位（0-8）”，之后购买该类别物品时自动移位到指定槽位（若目标槽位已有物品则<strong>交换</strong>）。</li>
+      <li>⚠️ 本功能处于<strong>测试阶段</strong>。<code>fastbuy.yml</code> 内含总开关 <code>enabled</code> 与全部界面文本 / 图标配置。</li>
+      <li>预设数据按玩家保存在内存中，<strong>玩家重新进入服务器后需重新设置</strong>。</li>
+    </ul>
+
+    <h3>2. 事件加血（healthadd.yml，新建配置文件）</h3>
+    <ul>
+      <li>可配置游戏开始后 <strong>1~4 次全体加血事件</strong>，或完全关闭。</li>
+      <li>默认 <strong>2 次</strong>（开局后第 5 分钟、第 10 分钟），每次默认 <strong>+5 颗心</strong>（<code>amount=10</code>，单位为半心，可修改）。</li>
+      <li>每次的触发时间（<code>time-minutes</code> / <code>time-seconds</code>）与血量（<code>amount</code>）均可<strong>单独配置</strong>。</li>
+      <li>自动集成到游戏计分板事件显示：当加血时间早于下一个事件链事件时，事件行显示<strong>加血事件倒计时</strong>。</li>
+      <li>触发时全竞技场广播提示并播放音效。</li>
+    </ul>
+
+    <h3>3. 游戏总时长限制（config.yml：<code>game-duration-limit</code>）</h3>
+    <ul>
+      <li>默认 <code>60</code>（分钟），游戏进行到时限后<strong>强制结算</strong>。</li>
+      <li>单位仅为分钟，设为 <code>&lt;=0</code> 时关闭限制。</li>
+    </ul>
+
+    <h3>4. 隐身增强（config.yml：<code>invisibility-enhance</code>）</h3>
+    <ul>
+      <li><code>invisibility-enhance.enabled=true</code>（默认开启）。</li>
+      <li>玩家喝下隐身药水后，<strong>非队友完全看不到该玩家（包括手持物品）</strong>。</li>
+      <li>队友可以看到其头顶名字标签，方便队内识别。</li>
+      <li>隐身玩家<strong>未蹲下时持续向队友发送粒子效果</strong>（蹲下即隐藏粒子），比原版疾跑粒子更实用。</li>
+      <li>粒子参数可调：<code>particle-interval=4</code>（发送间隔）、<code>particle-amount=3</code>（粒子数量）。</li>
+    </ul>
+
+    <h3>5. 重生时间减少增益开关（config.yml：<code>respawn-time-reduction-enabled</code>）</h3>
+    <ul>
+      <li>默认 <code>true</code>。</li>
+      <li>关闭后，“重生时间减少”团队升级将<strong>不再生效</strong>。</li>
+    </ul>
+
+    <h3>6. 4/5 级资源点级别（钻石 / 绿宝石 Tier IV/V）</h3>
+    <ul>
+      <li><code>generators.yml</code> 新增默认值：
+        <ul>
+          <li>钻石：IV 级 1800 秒出现，V 级 2520 秒出现。</li>
+          <li>绿宝石：IV 级 2160 秒出现，V 级 2880 秒出现。</li>
+          <li>均可自行修改。</li>
+        </ul>
+      </li>
+      <li><code>config.yml</code> 新增 <code>generator-tier-4-5-enabled=true</code>，设为 <code>false</code> 可<strong>整体关闭</strong> IV/V 级资源点。</li>
+    </ul>
+
+    <h3>7. 胜利用时显示开关（config.yml：<code>win-time-display</code>）</h3>
+    <ul>
+      <li>默认 <code>true</code>，胜利副标题显示“获得胜利, 用时”。</li>
+      <li>消息可在语言文件 <code>GAME_END_WIN_TIME_SUBTITLE</code> 中自定义，支持 <code>{team}</code> / <code>{time}</code> 占位符。</li>
+    </ul>
+
+    <h3>8. 等级显示模式（config.yml：<code>levels-display-mode</code>）</h3>
+    <ul>
+      <li><code>fancy</code>：原有彩色阶数 / 星级显示（默认）。</li>
+      <li><code>simple</code>：纯色简版显示。</li>
+    </ul>
+
+    <h3>9. 新版本适配</h3>
+    <ul>
+      <li>新增支持 <strong>Minecraft 1.20.5、1.20.6、1.21、1.21.1、1.21.2、1.21.3、1.21.4</strong>（此前最高 1.20.4）。</li>
+    </ul>
+
+    <h3>10. 语言精简</h3>
+    <ul>
+      <li>语言系统仅保留<strong>简体中文（zh_cn）、繁体中文（zh_tw，新增）、英文（en）</strong>，移除其余 11 种语言。</li>
+    </ul>
+
+    <h2>BUG 修复</h2>
+    <ol>
+      <li><strong>修复 Shift+点击购买一组只扣除 1 份资源的问题</strong>——现按比例计价（例：羊毛 16 个 / 4 铁，Shift+点击买 64 个扣 16 铁）。</li>
+      <li><strong>修复 debug 模式 <code>/bw time add</code> 后事件系统卡死、游戏永不结束的 bug</strong>——倒计时被减到 0 后事件不再推进；现在计数归零立即推进事件、倒计时钳制最小 1 秒、单次加时不超过当前阶段剩余时间，重复输入可继续推进。</li>
+      <li><strong>修复 ChunkLoad 监听器在异步线程调用实体 API 的问题</strong>——改回主线程执行。</li>
+    </ol>
+
+    <h2>优化</h2>
+    <ol>
+      <li><strong>版本适配层重构</strong>：新增 <code>versionsupport_v1_21_R1/R2/R3</code> 模块；1.20.5+ 适配器不再依赖带版本号的 CraftBukkit 包名（改用公开 Bukkit API + 运行时反射，物品标识改用 PersistentDataContainer）。</li>
+      <li>隐身玩家名牌显示按队伍区分（BwTabList）。</li>
+      <li>隐身粒子仅发送给队友，降低网络 / 客户端开销。</li>
+      <li><code>/bw time add</code> 每次最多推进到下一个事件，防止误操作跳过床摧毁阶段。</li>
+    </ol>
+
+    <h2>配置文件变更</h2>
+
+    <h3>config.yml 新增</h3>
+    <table>
+      <thead><tr><th>配置项</th><th>默认值</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>game-duration-limit</code></td><td><code>60</code></td><td>游戏总时长限制（分钟），<code>&lt;=0</code> 关闭</td></tr>
+        <tr><td><code>win-time-display</code></td><td><code>true</code></td><td>胜利副标题显示用时</td></tr>
+        <tr><td><code>respawn-time-reduction-enabled</code></td><td><code>true</code></td><td>重生时间减少团队升级开关</td></tr>
+        <tr><td><code>generator-tier-4-5-enabled</code></td><td><code>true</code></td><td>钻石 / 绿宝石 IV/V 级资源点总开关</td></tr>
+        <tr><td><code>levels-display-mode</code></td><td><code>fancy</code></td><td>等级显示模式：<code>fancy</code> / <code>simple</code></td></tr>
+        <tr><td><code>invisibility-enhance.enabled</code></td><td><code>true</code></td><td>隐身增强总开关</td></tr>
+        <tr><td><code>invisibility-enhance.particle-interval</code></td><td><code>4</code></td><td>隐身粒子发送间隔</td></tr>
+        <tr><td><code>invisibility-enhance.particle-amount</code></td><td><code>3</code></td><td>隐身粒子数量</td></tr>
+      </tbody>
+    </table>
+
+    <h3>新增文件</h3>
+    <ul>
+      <li><code>healthadd.yml</code>：全体加血事件配置。</li>
+      <li><code>fastbuy.yml</code>：快捷栏预设（测试阶段）配置。</li>
+    </ul>
+
+    <h3>generators.yml 新增</h3>
+    <ul>
+      <li><code>Default.diamond.tierIV.*</code> / <code>Default.diamond.tierV.*</code> 配置节。</li>
+      <li><code>Default.emerald.tierIV.*</code> / <code>Default.emerald.tierV.*</code> 配置节。</li>
+    </ul>
+
+    <h3>其他</h3>
+    <ul>
+      <li><code>shopxp.yml</code>：移除自动生成的“下界合金剑”与“石中剑 EX”两项（下界合金套装保留）。</li>
+      <li>语言文件：仅保留 <code>zh_cn</code> / <code>zh_tw</code> / <code>en</code>。</li>
+    </ul>
+
+    <h2>升级注意</h2>
+    <ol>
+      <li><strong>版本兼容</strong>：本版本支持 <strong>1.8.8 ~ 1.21.4</strong>；1.20.5+ 通过新适配器支持，无需额外操作。</li>
+      <li><strong>1.20.5+ 物品标识变更</strong>：物品标识改用 PersistentDataContainer，<strong>与旧版本（1.20.4 及以下）的物品 tag 不互通</strong>。从旧版本升级且跨版本使用数据 / 地图时请注意。</li>
+      <li><strong>1.20.5+ 召唤物行为</strong>：银鲛鱼 / 铁傀儡召唤物在 1.20.5+ 使用原版 AI，行为与旧版本略有差异。</li>
+      <li><strong>构建环境</strong>：自行编译需要 <strong>JDK 21</strong>（运行服务器本身按其对应版本要求即可）。</li>
+      <li><strong>配置自动合并</strong>：首次以 26.9 启动时，<code>config.yml</code> 新增项、<code>generators.yml</code> IV/V 级配置节、<code>healthadd.yml</code>、<code>fastbuy.yml</code> 会自动生成；如需自定义请在其后修改并执行 <code>/bw reload</code>。</li>
+      <li><strong>快捷栏预设为测试阶段功能</strong>：数据不持久化（重进服务器需重设），如不稳定可通过 <code>fastbuy.yml</code> 中 <code>enabled: false</code> 关闭。</li>
+    </ol>
+
+    <div class="footer-nav">
+      <a href="#home">Wiki 总览</a><a href="#use">详细使用教程</a><a href="#readme">项目主页</a>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var pages       = document.querySelectorAll('.page');
+  var navLinks    = document.querySelectorAll('.nav-link');
+  var sidebar     = document.getElementById('sidebar');
+  var backdrop    = document.getElementById('backdrop');
+  var menuToggle  = document.getElementById('menuToggle');
+  var themeToggle = document.getElementById('themeToggle');
+  var searchInput = document.getElementById('searchInput');
+  var searchBox   = document.getElementById('searchResults');
+
+  /* ---------- 路由 ---------- */
+  function showPage(route) {
+    if (!route) route = 'home';
+    var target = document.querySelector('.page[data-route="' + route + '"]');
+    if (!target) { route = 'home'; }
+
+    for (var i = 0; i < pages.length; i++) {
+      pages[i].classList.toggle('active', pages[i].getAttribute('data-route') === route);
+    }
+    for (var j = 0; j < navLinks.length; j++) {
+      navLinks[j].classList.toggle('active', navLinks[j].getAttribute('data-route') === route);
+    }
+    var current = document.querySelector('.page[data-route="' + route + '"]');
+    var h1 = current ? current.querySelector('h1') : null;
+    document.title = (h1 ? h1.textContent.trim() + ' · ' : '') + 'BedWarsHeypixel Wiki';
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    closeSidebar();
+  }
+
+  window.addEventListener('hashchange', function () {
+    showPage(location.hash.replace(/^#/, ''));
+  });
+
+  /* ---------- 侧边栏（移动端） ---------- */
+  function openSidebar() {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  }
+  menuToggle.addEventListener('click', function () {
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  backdrop.addEventListener('click', closeSidebar);
+  sidebar.addEventListener('click', function (e) {
+    if (e.target.classList.contains('nav-link')) closeSidebar();
+  });
+
+  /* ---------- 主题切换 ---------- */
+  var THEME_KEY = 'bwh-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  }
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (!savedTheme) {
+    savedTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  applyTheme(savedTheme);
+  themeToggle.addEventListener('click', function () {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ---------- 搜索 ---------- */
+  var index = [];
+  for (var k = 0; k < pages.length; k++) {
+    var page = pages[k];
+    var titleEl = page.querySelector('h1');
+    index.push({
+      route: page.getAttribute('data-route'),
+      title: titleEl ? titleEl.textContent.trim() : page.getAttribute('data-route'),
+      text: page.textContent.replace(/\s+/g, ' ').toLowerCase()
+    });
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function renderResults(q) {
+    q = q.trim().toLowerCase();
+    if (!q) { searchBox.classList.remove('show'); searchBox.innerHTML = ''; return; }
+
+    var hits = [];
+    for (var i = 0; i < index.length; i++) {
+      var item = index[i];
+      var titleHit = item.title.toLowerCase().indexOf(q) !== -1;
+      var pos = item.text.indexOf(q);
+      if (titleHit || pos !== -1) {
+        var snippet = '';
+        if (pos !== -1) {
+          var start = Math.max(0, pos - 28);
+          snippet = (start > 0 ? '…' : '') + item.text.slice(start, pos + q.length + 42) + '…';
+        }
+        hits.push({ route: item.route, title: item.title, snippet: snippet, titleHit: titleHit });
+      }
+    }
+
+    hits.sort(function (a, b) { return (b.titleHit ? 1 : 0) - (a.titleHit ? 1 : 0); });
+
+    if (!hits.length) {
+      searchBox.innerHTML = '<div class="sr-empty">未找到匹配内容</div>';
+    } else {
+      searchBox.innerHTML = hits.slice(0, 8).map(function (h) {
+        var t = h.titleHit
+          ? h.title.replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<b>$1</b>')
+          : escapeHtml(h.title);
+        return '<a class="sr-item" href="#' + h.route + '">' + t +
+               (h.snippet ? '<small>' + escapeHtml(h.snippet) + '</small>' : '') + '</a>';
+      }).join('');
+    }
+    searchBox.classList.add('show');
+  }
+
+  searchInput.addEventListener('input', function () { renderResults(this.value); });
+  searchInput.addEventListener('focus', function () { if (this.value.trim()) renderResults(this.value); });
+  searchBox.addEventListener('click', function (e) {
+    if (e.target.closest('.sr-item')) {
+      searchBox.classList.remove('show');
+      searchInput.value = '';
+      searchInput.blur();
+    }
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.search-wrap')) searchBox.classList.remove('show');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { searchBox.classList.remove('show'); closeSidebar(); }
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  /* ---------- 代码复制按钮 ---------- */
+  var pres = document.querySelectorAll('pre');
+  for (var p = 0; p < pres.length; p++) {
+    (function (pre) {
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.type = 'button';
+      btn.textContent = '复制';
+      btn.addEventListener('click', function () {
+        var codeEl = pre.querySelector('code');
+        var txt = codeEl ? codeEl.innerText : pre.innerText;
+        var done = function () {
+          btn.textContent = '已复制!';
+          setTimeout(function () { btn.textContent = '复制'; }, 1400);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt, done); });
+        } else {
+          fallbackCopy(txt, done);
+        }
+      });
+      pre.appendChild(btn);
+    })(pres[p]);
+  }
+  function fallbackCopy(text, cb) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  /* ---------- 初始化 ---------- */
+  showPage(location.hash.replace(/^#/, '') || 'home');
+
+  /* 页面内跳转（同页链接）平滑滚动 */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var hash = a.getAttribute('href').slice(1);
+    if (!hash) return;
+    if (!document.querySelector('.page[data-route="' + hash + '"]')) return;
+    e.preventDefault();
+    if (location.hash === '#' + hash) showPage(hash);
+    else location.hash = hash;
+  });
+
+})();
+</script>
+</body>
+</html>
