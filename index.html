@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>插件文档中心 · GTPlux Wiki</title>
+<meta name="description" content="GTPlux 插件 Wiki 文档中心，选择你正在使用的插件，查看配置、指令、功能与常见问题。">
+<style>
+:root{
+  --bg:#ffffff; --bg-alt:#f6f8fa;
+  --border:#d8dee4; --text:#1f2328; --muted:#656d76;
+  --accent:#0969da; --accent-soft:rgba(9,105,218,.1);
+  --card-shadow:0 1px 3px rgba(27,31,36,.08);
+  --card-shadow-hover:0 10px 28px rgba(27,31,36,.13);
+  --ok-bg:rgba(26,127,55,.12); --ok-text:#1a7f37;
+}
+[data-theme="dark"]{
+  --bg:#0d1117; --bg-alt:#161b22;
+  --border:#30363d; --text:#e6edf3; --muted:#8b949e;
+  --accent:#58a6ff; --accent-soft:rgba(88,166,255,.15);
+  --card-shadow:0 1px 3px rgba(0,0,0,.5);
+  --card-shadow-hover:0 10px 28px rgba(0,0,0,.65);
+  --ok-bg:rgba(63,185,80,.15); --ok-text:#3fb950;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);line-height:1.7;
+  font-size:15px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;min-height:100vh;
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;height:58px;
+  display:flex;align-items:center;padding:0 24px;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:600}
+.brand-logo{
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,#0969da,#8250df);
+  color:#fff;font-size:13px;font-weight:700;letter-spacing:.5px;
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-text{font-size:15px}
+.brand-text em{font-style:normal;color:var(--muted);font-weight:400;font-size:13px}
+.theme-toggle{
+  margin-left:auto;width:36px;height:36px;border-radius:9px;
+  border:1px solid var(--border);background:var(--bg-alt);color:var(--text);
+  cursor:pointer;font-size:16px;line-height:1;transition:.15s;
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative;text-align:center;
+  padding:72px 24px 48px;overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;inset:-40% -10% auto;height:420px;
+  background:radial-gradient(ellipse at center, var(--accent-soft), transparent 62%);
+  pointer-events:none;
+}
+.hero-inner{position:relative;max-width:760px;margin:0 auto}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12.5px;font-weight:600;letter-spacing:.02em;
+  padding:5px 14px;border-radius:999px;margin-bottom:20px;
+  background:var(--accent-soft);color:var(--accent);border:1px solid transparent;
+}
+.hero-badge .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+.hero h1{
+  font-size:clamp(28px,5vw,42px);font-weight:750;letter-spacing:-.02em;
+  margin:0 0 16px;line-height:1.25;
+}
+.hero p{
+  font-size:clamp(14.5px,2vw,16.5px);color:var(--muted);
+  margin:0 auto;max-width:560px;line-height:1.75;
+}
+
+/* ---------- 插件网格 ---------- */
+.wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 24px 72px;flex:1}
+.section-label{
+  display:flex;align-items:center;gap:12px;margin:8px 0 22px;
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);
+}
+.section-label::after{
+  content:"";flex:1;height:1px;background:var(--border);
+}
+.plugins{
+  display:grid;gap:20px;
+  grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+}
+
+.plugin-card{
+  position:relative;display:flex;flex-direction:column;
+  padding:24px;border-radius:16px;
+  border:1px solid var(--border);background:var(--bg);
+  text-decoration:none;color:var(--text);
+  box-shadow:var(--card-shadow);
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  overflow:hidden;
+}
+.plugin-card::after{
+  content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;
+  background:linear-gradient(135deg, var(--accent-soft), transparent 45%);
+  opacity:0;transition:opacity .22s ease;
+}
+.plugin-card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--card-shadow-hover);
+  border-color:var(--accent);
+}
+.plugin-card:hover::after{opacity:1}
+.plugin-card > *{position:relative;z-index:1}
+
+.card-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.card-icon{
+  width:54px;height:54px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:19px;font-weight:700;color:#fff;letter-spacing:.5px;
+  box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+.icon-bw{background:linear-gradient(135deg,#0969da,#8250df)}
+.card-titles{min-width:0;flex:1}
+.card-name{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:17.5px;font-weight:650;letter-spacing:-.01em;line-height:1.35;
+}
+.card-version{
+  font-size:11px;font-weight:700;padding:2.5px 9px;border-radius:999px;
+  background:var(--ok-bg);color:var(--ok-text);white-space:nowrap;
+}
+.card-sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+.card-desc{
+  font-size:14px;color:var(--muted);line-height:1.7;
+  margin:0 0 18px;flex:1;
+}
+.card-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.tag{
+  font-size:12px;padding:3.5px 11px;border-radius:7px;
+  background:var(--bg-alt);border:1px solid var(--border);color:var(--muted);
+  white-space:nowrap;
+}
+.tag.tag-accent{
+  background:var(--accent-soft);border-color:transparent;color:var(--accent);
+  font-weight:600;
+}
+
+.card-action{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:14px;font-weight:650;color:var(--accent);
+  margin-top:auto;
+}
+.card-action .arrow{transition:transform .22s ease}
+.plugin-card:hover .card-action .arrow{transform:translateX(5px)}
+
+/* 占位卡片 */
+.plugin-card.is-placeholder{
+  border-style:dashed;background:transparent;
+  box-shadow:none;cursor:default;opacity:.62;
+}
+.plugin-card.is-placeholder:hover{
+  transform:none;border-color:var(--border);
+  box-shadow:none;border-style:dashed;
+}
+.plugin-card.is-placeholder::after{display:none}
+.icon-ph{
+  background:var(--bg-alt);color:var(--muted);
+  border:1px dashed var(--border);font-size:26px;font-weight:400;
+  box-shadow:none;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer{
+  border-top:1px solid var(--border);background:var(--bg-alt);
+  padding:28px 24px;text-align:center;
+  font-size:13px;color:var(--muted);
+}
+.site-footer a{color:var(--accent);text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
+.site-footer .sep{margin:0 8px;opacity:.5}
+.site-footer .muted-line{margin-top:8px;font-size:12.5px;opacity:.85}
+
+/* ---------- 响应式 ---------- */
+@media(max-width:640px){
+  .hero{padding:52px 20px 36px}
+  .wrap{padding:0 18px 56px}
+  .plugins{grid-template-columns:1fr;gap:16px}
+  .plugin-card{padding:20px}
+  .card-icon{width:48px;height:48px;border-radius:12px;font-size:17px}
+  .topbar{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 顶栏 ============ -->
+<header class="topbar">
+  <a class="brand" href="./">
+    <span class="brand-logo">W</span>
+    <span class="brand-text">GTPlux <em>Wiki</em></span>
+  </a>
+  <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+</header>
+
+<!-- ============ Hero ============ -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-badge"><span class="dot"></span>插件文档中心</span>
+    <h1>选择一个插件<br>开始查阅文档</h1>
+    <p>这里汇集了所有由 GTPlux 维护的插件 Wiki 文档。点击插件卡片即可进入对应 Wiki，查看配置说明、指令权限、功能详解与常见问题。</p>
+  </div>
+</section>
+
+<!-- ============ 插件列表 ============ -->
+<main class="wrap">
+  <div class="section-label">全部插件</div>
+
+  <div class="plugins">
+
+    <!-- ---------- BedWarsHeypixel ---------- -->
+    <a class="plugin-card" href="./bedwarsheypixel/">
+      <div class="card-head">
+        <div class="card-icon icon-bw">BW</div>
+        <div class="card-titles">
+          <div class="card-name">
+            BedWarsHeypixel
+            <span class="card-version">v26.9</span>
+          </div>
+          <div class="card-sub">起床战争 · 综合服插件</div>
+        </div>
+      </div>
+
+      <p class="card-desc">
+        基于 BedWars1058 二次开发的起床战争插件（经原作者 andrei1058 授权），新增快捷栏预设、事件加血、隐身增强、4/5 级资源点、经验模式等大量功能与优化。
+      </p>
+
+      <div class="card-tags">
+        <span class="tag tag-accent">Minecraft 1.8.8 ~ 1.21.4</span>
+        <span class="tag">Spigot / Paper</span>
+        <span class="tag">BedWars</span>
+        <span class="tag">26.9</span>
+      </div>
+
+      <span class="card-action">进入 Wiki <span class="arrow">→</span></span>
+    </a>
+
+    <!-- ---------- 占位：更多插件 ---------- -->
+    <div class="plugin-card is-placeholder" aria-disabled="true">
+      <div class="card-head">
+        <div class="card-icon icon-ph">+</div>
+        <div class="card-titles">
+          <div class="card-name">更多插件</div>
+          <div class="card-sub">即将上线</div>
+        </div>
+      </div>
+      <p class="card-desc">
+        更多由 GTPlux 维护的插件文档正在筹备中，敬请期待。
+      </p>
+      <div class="card-tags">
+        <span class="tag">Coming soon</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ============ 页脚 ============ -->
+<footer class="site-footer">
+  <div>
+    <a href="https://wiki.gtplux.dpdns.org">wiki.gtplux.dpdns.org</a>
+    <span class="sep">·</span>
+    <a href="./bedwarsheypixel/">BedWarsHeypixel Wiki</a>
+  </div>
+  <div class="muted-line">
+    © 2026 GTPlux · BedWarsHeypixel 基于 BedWars1058（GNU GPL v3）二次开发，由 andrei1058 授权
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 主题切换 ---------- */
+  var THEME_KEY = 'gtplux-theme';
+  var toggle = document.getElementById('themeToggle');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (!saved) {
+    saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark' : 'light';
+  }
+  applyTheme(saved);
+
+  toggle.addEventListener('click', function () {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+  });
+})();
+</script>
+</body>
+</html>
