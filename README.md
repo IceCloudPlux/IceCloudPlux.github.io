@@ -1,4 +1,4 @@
-# BedWarsHeypixel Wiki
+# Wiki 页面
 
 > 这是本人插件的 Wiki 仓库，存放全部文档源文件与整合后的网页版本。
 
