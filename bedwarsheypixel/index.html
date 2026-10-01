@@ -260,6 +260,7 @@ blockquote p:last-child,.callout p:last-child{margin-bottom:0}
     <div class="nav-group">
       <div class="nav-title">更新</div>
       <a class="nav-link" href="#changelog" data-route="changelog">更新日志 26.9</a>
+      <a class="nav-link" href="#changelog-2691" data-route="changelog-2691">更新日志 26.9.1</a>
     </div>
   </aside>
 
@@ -269,7 +270,7 @@ blockquote p:last-child,.callout p:last-child{margin-bottom:0}
   <!-- ======== 页面：项目主页 ======== -->
   <section class="page" data-route="readme">
     <h1>BedWarsHeypixel</h1>
-    <p class="lede">基于 BedWars1058 二次开发的新型插件 · 当前版本 <span class="badge">26.9</span></p>
+    <p class="lede">基于 BedWars1058 二次开发的新型插件 · 当前版本 <span class="badge">26.9.1</span></p>
 
     <div class="callout callout-info">
       <p>本插件经过原作者 <strong>andrei1058</strong> 授权，添加了诸多功能和内容，每个月至少更新 1~3 次。</p>
@@ -280,6 +281,7 @@ blockquote p:last-child,.callout p:last-child{margin-bottom:0}
       <a class="card" href="#use"><b>详细使用教程</b><span>纯插件详细使用教程，从零开始安装、授权、搭建竞技场到配置全部新功能。</span></a>
       <a class="card" href="#home"><b>Wiki 总览</b><span>配置详解 / 指令权限 / 功能说明 / 版本兼容 / FAQ 入口。</span></a>
       <a class="card" href="#changelog"><b>更新日志 26.9</b><span>新增功能、BUG 修复、优化与配置文件变更一览。</span></a>
+      <a class="card" href="#changelog-2691"><b>更新日志 26.9.1</b><span>维护更新：版本号升级、帮助地址统一、作者署名调整。</span></a>
     </div>
 
     <h2>功能介绍（相对原版 1058）</h2>
@@ -525,11 +527,12 @@ blockquote p:last-child,.callout p:last-child{margin-bottom:0}
 
     <p>本 Wiki 面向服主与管理员，覆盖配置、指令、功能与版本兼容等内容。新手服主建议先阅读 <a href="#use">详细使用教程</a>，再按需查阅下列分页。</p>
 
-    <h2>当前版本：26.9</h2>
+    <h2>当前版本：26.9.1</h2>
     <ul>
       <li>支持 Minecraft <strong>1.8.8 ~ 1.21.4</strong></li>
       <li>26.9 重点：新版本适配（1.20.5 ~ 1.21.4）、快捷栏预设（测试阶段）、事件加血、隐身增强、游戏总时长限制</li>
-      <li>完整变更见 <a href="#changelog">CHANGELOG-26.9</a></li>
+      <li>26.9.1 为维护更新：版本号升级、帮助地址统一、作者署名调整，<strong>完全兼容 26.9 配置与存档</strong></li>
+      <li>完整变更见 <a href="#changelog">CHANGELOG-26.9</a> · <a href="#changelog-2691">CHANGELOG-26.9.1</a></li>
     </ul>
 
     <h2>Wiki 目录</h2>
@@ -601,7 +604,7 @@ blockquote p:last-child,.callout p:last-child{margin-bottom:0}
 
     <h2>二、下载与安装</h2>
     <ol>
-      <li>获取 BedWarsHeypixel 26.9 插件 jar 文件。</li>
+      <li>获取 BedWarsHeypixel 26.9.1 插件 jar 文件。</li>
       <li>将 jar 放入服务端的 <code>plugins</code> 文件夹。</li>
       <li>（可选）安装上述软依赖插件。</li>
       <li>启动服务端。</li>
@@ -1454,6 +1457,13 @@ gui:
     <p><strong>Q：语言只有三种了吗？</strong><br>
     A：26.9 起语言系统仅保留简体中文（zh_cn）、繁体中文（zh_tw，新增）、英文（en），其余 11 种已移除。</p>
 
+    <h2>26.9.1 维护更新</h2>
+    <p><strong>Q：26.9.1 需要改配置文件吗？</strong><br>
+    A：不需要。26.9.1 为维护更新，不涉及玩法与配置变更，<strong>完全兼容 26.9 的配置与存档</strong>，直接替换 jar 即可。</p>
+
+    <p><strong>Q：26.9.1 改了什么？</strong><br>
+    A：版本号升级至 <code>26.9.1</code>（jar 文件名为 <code>bedwars-plugin-26.9.1.jar</code>）、插件内帮助 / 文档地址统一为 <code>https://wiki.gtplux.dpdns.org/bedwarsheypixel</code>、作者署名调整为 ya_xzer21145 (Reationura)，同时保留原作者 andrei1058 的版权与授权声明。详见 <a href="#changelog-2691">更新日志 26.9.1</a>。</p>
+
     <h2>商店与经济</h2>
     <p><strong>Q：怎么编辑商店内容？</strong><br>
     A：编辑 <code>plugins/BedWarsHeypixel/shop.yml</code>（常规商店）或 <code>shopxp.yml</code>（经验商店）后 <code>/bw reload</code>。可按类别 / 等级（tier）结构添加商品，支持设置价格、货币类型、显示物品、快捷购买默认槽位等。编辑方法详见 <a href="#use">详细使用教程</a>。</p>
@@ -1606,7 +1616,83 @@ gui:
     </ol>
 
     <div class="footer-nav">
-      <a href="#home">Wiki 总览</a><a href="#use">详细使用教程</a><a href="#readme">项目主页</a>
+      <a href="#changelog-2691">更新日志 26.9.1</a><a href="#home">Wiki 总览</a><a href="#use">详细使用教程</a><a href="#readme">项目主页</a>
+    </div>
+  </section>
+
+  <!-- ======== 页面：更新日志 26.9.1 ======== -->
+  <section class="page" data-route="changelog-2691">
+    <h1>更新日志 — 26.9.1</h1>
+    <p class="lede">本版本为 <strong>26.9 的维护更新</strong>，重点：<strong>版本号升级</strong>、<strong>帮助地址统一</strong>、<strong>作者署名调整（保留原作者版权）</strong>。不涉及游戏玩法与配置文件变更，26.9 的功能与配置<strong>完全兼容</strong>。</p>
+
+    <div class="callout callout-info">
+      <p>本版本无功能、配置或数据格式变更，可直接替换 jar 升级，无需改动任何配置文件。</p>
+    </div>
+
+    <h2>变更内容</h2>
+
+    <h3>1. 版本号升级 26.9 → 26.9.1</h3>
+    <ul>
+      <li>根项目及全部 20 个子模块的 <code>pom.xml</code> 版本号统一更新为 <code>26.9.1</code>（共 21 处）。</li>
+      <li>构建产物变更为 <code>bedwars-plugin-26.9.1.jar</code>。</li>
+      <li><code>plugin.yml</code> 中的 <code>version: ${project.version}</code> 随之输出为 <code>26.9.1</code>。</li>
+    </ul>
+
+    <h3>2. 帮助 / 文档地址统一</h3>
+    <p>插件内所有帮助与文档链接统一为：</p>
+<pre><code>https://wiki.gtplux.dpdns.org/bedwarsheypixel</code></pre>
+    <p>涉及位置：</p>
+    <table>
+      <thead><tr><th>位置</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><code>BedWars.java</code>（<code>link</code> 字段）</td><td><code>/bw</code> 命令主界面 credits 行的点击跳转地址</td></tr>
+        <tr><td><code>BedWars.java</code>（版本不支持时的报错日志）</td><td>启动失败时输出的帮助地址</td></tr>
+        <tr><td><code>MainConfig.java</code></td><td><code>config.yml</code> 文件头部 "Documentation here"</td></tr>
+        <tr><td><code>GeneratorsConfig.java</code></td><td><code>generators.yml</code> 文件头部 "Documentation"</td></tr>
+        <tr><td><code>ArenaConfig.java</code></td><td>竞技场配置文件头部 "Documentation here"</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3. 作者署名调整</h3>
+    <ul>
+      <li>主署名调整为 <strong>ya_xzer21145 (Reationura)</strong>，涉及：
+        <ul>
+          <li><code>plugin.yml</code> 的 <code>author</code> 与 <code>description</code>；</li>
+          <li>根 <code>pom.xml</code> 的 <code>&lt;description&gt;</code>；</li>
+          <li><code>BedWars.java</code> 头部署名（<code>Secondary development by ya_xzer21145 (Reationura)</code>）；</li>
+          <li><code>MainConfig.java</code> / <code>GeneratorsConfig.java</code> 配置文件头部署名；</li>
+          <li><code>/bw</code> 命令 credits 行（<code>by ya_xzer21145 (Reationura)</code>）。</li>
+        </ul>
+      </li>
+      <li><strong>保留原作者版权与授权声明</strong>：
+        <ul>
+          <li><code>BedWars.java</code> 头部保留 <code>Based on BedWars1058 by Andrei Dascălu (andrei1058)</code>、<code>Copyright (C) 2021 Andrei Dascălu</code> 及 GPL v3 声明；</li>
+          <li><code>plugin.yml</code> 的 <code>author</code> 保留 <code>andrei1058</code>；</li>
+          <li>各源码文件头部的 GPL v3 许可与原始项目链接 <code>https://github.com/andrei1058/BedWars1058</code> 原样保留；</li>
+          <li>包名 <code>com.andrei1058.bedwars</code> 不变。</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>未改动项说明</h2>
+    <p>以下内容有意保持不变，以免影响构建、授权或第三方归属：</p>
+    <ul>
+      <li><code>config.yml</code> 的 <code>storeLink</code>（商店链接）保持原值。</li>
+      <li>Maven 仓库地址、<code>pom.xml</code> 的 <code>&lt;url&gt;</code>（原始项目地址）保持原值。</li>
+      <li>授权校验（<code>LicenseChecker</code>）的校验端点保持原值。</li>
+      <li>计分板 <code>SidebarLib by andrei1058</code> 等第三方库署名保持原值。</li>
+      <li>语言文件中的 "BedWars1058 was RELOADED!" 提示保持原值。</li>
+    </ul>
+
+    <h2>升级注意</h2>
+    <ol>
+      <li><strong>完全兼容 26.9</strong>：本版本无功能、配置或数据格式变更，可直接替换 jar 升级，无需改动任何配置文件。</li>
+      <li><strong>构建环境</strong>：自行编译仍需 <strong>JDK 21</strong>；运行服务器按对应 Minecraft 版本要求即可。</li>
+      <li><strong>支持版本</strong>：Minecraft <strong>1.8.8 ~ 1.21.4</strong>。</li>
+    </ol>
+
+    <div class="footer-nav">
+      <a href="#changelog">更新日志 26.9</a><a href="#home">Wiki 总览</a><a href="#use">详细使用教程</a>
     </div>
   </section>
 
